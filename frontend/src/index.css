@@ -1,0 +1,61 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: 'Inter', sans-serif;
+
+  /* Brand Colors from Reference Images */
+  --color-primary: #F97316;
+  /* Orange-500 */
+  --color-primary-hover: #EA580C;
+  /* Orange-600 */
+  --color-primary-light: #FFEDD5;
+  /* Orange-100 */
+
+  --color-dark: #0F172A;
+  /* Slate-900 (Footer/Headings) */
+  --color-dark-light: #1E293B;
+  /* Slate-800 */
+
+  --color-secondary: #64748B;
+
+  --color-success: #10B981;
+  --color-warning: #F59E0B;
+  --color-danger: #EF4444;
+
+  --color-background: #FFFFFF;
+  --color-surface: #FFFFFF;
+}
+
+body {
+  background-color: var(--color-background);
+  color: #334155;
+  /* Slate-700 */
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+@layer components {
+  .btn-primary {
+    @apply px-6 py-2.5 bg-primary text-white rounded-lg hover:bg-primary-hover transition-colors font-semibold shadow-md shadow-primary/20 flex items-center justify-center;
+  }
+
+  .btn-outline {
+    @apply px-6 py-2.5 border-2 border-white text-white rounded-lg hover:bg-white/10 transition-colors font-semibold flex items-center justify-center;
+  }
+
+  .nav-link {
+    @apply text-slate-600 hover:text-primary font-medium transition-colors;
+  }
+
+  .card {
+    @apply bg-surface rounded-2xl shadow-sm border border-slate-100 p-8 hover:shadow-lg transition-shadow duration-300;
+  }
+
+  .input-field {
+    @apply w-full px-4 py-3 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all text-slate-700 bg-slate-50;
+  }
+}
