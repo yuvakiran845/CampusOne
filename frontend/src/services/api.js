@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const API = axios.create({
-    baseURL: `http://${window.location.hostname}:5000/api`,
+    baseURL: 'https://campusone-87s8.onrender.com/api',
 });
 
 // Add token to requests

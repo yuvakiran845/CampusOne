@@ -15,7 +15,17 @@ const app = express();
 
 // Middleware
 app.use(express.json());
-app.use(cors());
+
+// CORS Configuration
+const corsOptions = {
+    origin: [
+        'http://localhost:5173',           // Local development
+        'https://campusone-1.onrender.com' // Production frontend
+    ],
+    credentials: true,
+    optionsSuccessStatus: 200
+};
+app.use(cors(corsOptions));
 app.use(helmet());
 app.use(morgan('dev'));
 
