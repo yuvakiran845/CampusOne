@@ -33,7 +33,7 @@ export const AuthProvider = ({ children }) => {
     const signout = () => {
         authService.signout();
         setUser(null);
-        window.location.href = '/login';
+        window.location.replace('/login');
     };
 
     const forgotPassword = async (email) => {
