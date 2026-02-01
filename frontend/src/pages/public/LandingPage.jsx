@@ -14,7 +14,14 @@ import {
     ClipboardCheck,
     LineChart,
     Bell,
-    ArrowRight
+    ArrowRight,
+    Award,
+    Cpu,
+    Globe,
+    Search,
+    Zap,
+    Target,
+    CheckCircle2
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -384,16 +391,24 @@ const LandingPage = () => {
 
                             <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 text-left">
                                 {[
-                                    { title: "Academic Excellence", desc: "NAAC A+ Accrediated and NBA certified programs." },
-                                    { title: "Industry 4.0 Labs", desc: "State-of-the-art facilities for AI, Robotics, and IoT." },
-                                    { title: "Global Placements", desc: "Elite track record with over 500+ multinational recruiters." },
-                                    { title: "Research Hub", desc: "Dedicated innovation cell with 50+ patents filed yearly." },
-                                    { title: "Smart Campus", desc: "Fully eco-friendly campus with 24/7 high-speed digital connectivity." },
-                                    { title: "Skill Development", desc: "Integrated APSSDC labs and professional certification courses." }
+                                    { title: "Academic Excellence", desc: "NAAC A+ Accrediated and NBA certified programs.", icon: Award },
+                                    { title: "Industry 4.0 Labs", desc: "State-of-the-art facilities for AI, Robotics, and IoT.", icon: Cpu },
+                                    { title: "Global Placements", desc: "Elite track record with over 500+ multinational recruiters.", icon: Globe },
+                                    { title: "Research Hub", desc: "Dedicated innovation cell with 50+ patents filed yearly.", icon: Search },
+                                    { title: "Smart Campus", desc: "Fully eco-friendly campus with 24/7 high-speed digital connectivity.", icon: Zap },
+                                    { title: "Skill Development", desc: "Integrated APSSDC labs and professional certification courses.", icon: Target }
                                 ].map((item, i) => (
-                                    <div key={i} className="p-5 bg-slate-50 rounded-2xl border border-slate-100 hover:bg-orange-50/50 hover:border-orange-100 transition-colors group">
-                                        <h4 className="font-black text-slate-900 text-sm md:text-base mb-1 tracking-tight group-hover:text-orange-600">{item.title}</h4>
-                                        <p className="text-xs md:text-sm text-slate-500 font-medium leading-relaxed">{item.desc}</p>
+                                    <div key={i} className="flex items-start gap-4 p-5 bg-white rounded-2xl border border-slate-100 hover:border-orange-200 hover:shadow-xl hover:shadow-orange-500/5 transition-all duration-300 group">
+                                        <div className="mt-1 shrink-0 w-8 h-8 rounded-lg bg-orange-50 text-orange-600 flex items-center justify-center group-hover:bg-orange-600 group-hover:text-white transition-colors duration-300">
+                                            <item.icon size={18} />
+                                        </div>
+                                        <div className="space-y-1">
+                                            <div className="flex items-center gap-2">
+                                                <h4 className="font-extrabold text-slate-900 text-sm md:text-base tracking-tight">{item.title}</h4>
+                                                <CheckCircle2 size={12} className="text-emerald-500 opacity-0 group-hover:opacity-100 transition-opacity" />
+                                            </div>
+                                            <p className="text-xs md:text-sm text-slate-500 font-medium leading-relaxed">{item.desc}</p>
+                                        </div>
                                     </div>
                                 ))}
                             </div>

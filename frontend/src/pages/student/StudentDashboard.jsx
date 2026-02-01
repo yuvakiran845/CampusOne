@@ -18,7 +18,8 @@ import {
     MapPin,
     ArrowLeft,
     ClipboardList,
-    BookOpen
+    BookOpen,
+    LogOut
 } from 'lucide-react';
 import AuthContext from '../../context/AuthContext';
 import DashboardLayout from '../../components/layout/DashboardLayout';
@@ -26,7 +27,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useLocation, useNavigate } from 'react-router-dom';
 
 const StudentDashboard = ({ activeTab: initialTabProp = 'dashboard' }) => {
-    const { user, loading } = useContext(AuthContext);
+    const { user, loading, signout } = useContext(AuthContext);
     const location = useLocation();
     const navigate = useNavigate();
     const [activeTab, setActiveTab] = useState(initialTabProp);
@@ -158,14 +159,14 @@ const StudentDashboard = ({ activeTab: initialTabProp = 'dashboard' }) => {
                         <span className="text-slate-200">/</span>
                         <span className="text-slate-900">STUDENT</span>
                     </div>
-                    <div className="space-y-1">
-                        <p className="text-[10px] font-black text-indigo-600 uppercase tracking-widest">
+                    <div className="space-y-2">
+                        <p className="text-[10px] font-black text-indigo-600 uppercase tracking-widest px-1">
                             ACADEMIC YEAR {studentData.academicYear} • {studentData.date}
                         </p>
-                        <h1 className="text-4xl md:text-5xl font-black text-slate-900 tracking-tight">
+                        <h1 className="text-3xl md:text-5xl font-black text-slate-900 tracking-tight leading-tight">
                             Welcome back, <span className="text-slate-900">{studentData.name}</span>
                         </h1>
-                        <p className="text-base font-bold text-slate-400">
+                        <p className="text-sm md:text-base font-bold text-slate-400">
                             Track your daily schedule and academic performance in real-time.
                         </p>
                     </div>
@@ -174,7 +175,7 @@ const StudentDashboard = ({ activeTab: initialTabProp = 'dashboard' }) => {
                 {/* CGPA Card badge */}
                 <motion.div
                     whileHover={{ scale: 1.02 }}
-                    className="bg-slate-950 rounded-[2.5rem] p-8 text-white shadow-2xl flex items-center gap-8 min-w-[300px] relative overflow-hidden cursor-pointer group"
+                    className="bg-slate-950 rounded-3xl md:rounded-[2.5rem] p-6 sm:p-8 text-white shadow-2xl flex flex-col sm:flex-row items-center gap-4 sm:gap-8 min-w-[220px] sm:min-w-[300px] relative overflow-hidden cursor-pointer group"
                     onClick={() => setActiveTab('marks')}
                 >
                     <div className="space-y-1 text-left relative z-10">
@@ -193,9 +194,9 @@ const StudentDashboard = ({ activeTab: initialTabProp = 'dashboard' }) => {
             </div>
 
             {/* Attendance & Analytics Grid */}
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
-                <div className="lg:col-span-8">
-                    <div className="bg-white rounded-[3rem] p-10 border border-slate-100 shadow-sm space-y-10">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-8">
+                <div className="md:col-span-1 lg:col-span-8">
+                    <div className="bg-white rounded-3xl md:rounded-[3rem] p-6 md:p-10 border border-slate-100 shadow-sm space-y-8 md:space-y-10">
                         <div className="flex items-center justify-between">
                             <div className="flex items-center gap-3">
                                 <div className="w-8 h-8 rounded-full bg-emerald-50 text-emerald-600 flex items-center justify-center">
@@ -207,18 +208,18 @@ const StudentDashboard = ({ activeTab: initialTabProp = 'dashboard' }) => {
                         </div>
 
                         {/* Attendance Chart Bars */}
-                        <div className="h-64 flex items-end justify-between gap-4 px-4 overflow-x-auto pb-4">
+                        <div className="h-64 flex items-end justify-between gap-2 px-2 overflow-x-auto pb-4 scrollbar-thin scrollbar-thumb-slate-200 scrollbar-track-transparent md:gap-4 md:px-4">
                             {attendanceStats.slice(0, 7).map((stat, i) => (
-                                <div key={i} className="flex-1 flex flex-col items-center gap-4 group min-w-[40px]">
-                                    <div className="w-full relative flex items-end justify-center h-48">
+                                <div key={i} className="flex-1 flex flex-col items-center gap-2 group min-w-[36px] md:min-w-[40px]">
+                                    <div className="w-full relative flex items-end justify-center h-40 md:h-48">
                                         <motion.div
                                             initial={{ height: 0 }}
                                             animate={{ height: `${stat.val}%` }}
-                                            transition={{ duration: 1, delay: i * 0.1, ease: "circOut" }}
-                                            className={`w-full max-w-[48px] ${stat.color} rounded-2xl shadow-lg group-hover:brightness-110 transition-all cursor-pointer`}
+                                            transition={{ duration: 1, delay: i * 0.1, ease: 'circOut' }}
+                                            className={`w-full max-w-[36px] md:max-w-[48px] ${stat.color} rounded-2xl shadow-lg group-hover:brightness-110 transition-all cursor-pointer`}
                                         />
                                     </div>
-                                    <span className="text-[10px] font-black text-slate-400 uppercase tracking-tighter">{stat.code}</span>
+                                    <span className="text-[9px] md:text-[10px] font-black text-slate-400 uppercase tracking-tighter">{stat.code}</span>
                                 </div>
                             ))}
                         </div>
@@ -234,8 +235,8 @@ const StudentDashboard = ({ activeTab: initialTabProp = 'dashboard' }) => {
                 </div>
 
                 {/* Academic Mini-Report */}
-                <div className="lg:col-span-4">
-                    <div className="bg-white rounded-[3rem] p-10 border border-slate-100 shadow-sm space-y-10 flex flex-col h-full">
+                <div className="md:col-span-1 lg:col-span-4">
+                    <div className="bg-white rounded-3xl md:rounded-[3rem] p-6 md:p-10 border border-slate-100 shadow-sm space-y-8 md:space-y-10 flex flex-col h-full">
                         <div className="flex items-center justify-between">
                             <div className="flex items-center gap-3">
                                 <BarChart3 size={20} className="text-indigo-600" />
@@ -281,7 +282,7 @@ const StudentDashboard = ({ activeTab: initialTabProp = 'dashboard' }) => {
                     <button onClick={() => setActiveTab('timetable')} className="text-[10px] font-black text-indigo-600 uppercase tracking-widest hover:underline">View Full Timetable</button>
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-6">
                     {currentDayStr === 'Sun' ? (
                         <div className="md:col-span-3 bg-white p-12 rounded-[2.5rem] border border-slate-100 shadow-sm flex flex-col items-center justify-center text-center space-y-4">
                             <div className="w-16 h-16 bg-orange-50 rounded-full flex items-center justify-center text-orange-600">
@@ -294,7 +295,7 @@ const StudentDashboard = ({ activeTab: initialTabProp = 'dashboard' }) => {
                         </div>
                     ) : (
                         todaySchedule.slice(0, 3).map((slot, i) => (
-                            <div key={i} className={`bg-white p-8 rounded-[2.5rem] border border-slate-100 shadow-sm hover:shadow-xl transition-all group text-left cursor-pointer ${isScheduleOver ? 'opacity-50 grayscale' : ''}`}>
+                            <div key={i} className={`bg-white p-6 md:p-8 rounded-3xl md:rounded-[2.5rem] border border-slate-100 shadow-sm hover:shadow-xl transition-all group text-left cursor-pointer ${isScheduleOver ? 'opacity-50 grayscale' : ''}`}>
                                 <div className="flex items-center justify-between mb-6">
                                     <div className={`p-3 bg-slate-50 rounded-xl group-hover:bg-indigo-50 transition-colors`}>
                                         <Clock size={20} className="text-slate-400 group-hover:text-indigo-600" />
@@ -306,7 +307,7 @@ const StudentDashboard = ({ activeTab: initialTabProp = 'dashboard' }) => {
                             </div>
                         ))
                     )}
-                    <div className={`rounded-[2.5rem] p-8 flex flex-col items-center justify-center text-center space-y-2 group cursor-pointer border-b-4 shadow-2xl overflow-hidden relative transition-all ${status.isBreak ? 'bg-indigo-600 border-indigo-400' : 'bg-slate-950 border-indigo-600'}`} onClick={() => setActiveTab('timetable')}>
+                    <div className={`rounded-3xl md:rounded-[2.5rem] p-6 sm:p-8 flex flex-col items-center justify-center text-center space-y-2 group cursor-pointer border-b-4 shadow-2xl overflow-hidden relative transition-all ${status.isBreak ? 'bg-indigo-600 border-indigo-400' : 'bg-slate-950 border-indigo-600'}`} onClick={() => setActiveTab('timetable')}>
                         <div className="space-y-1 relative z-10">
                             <span className={`text-[10px] font-black uppercase tracking-[0.4em] ${status.isBreak ? 'text-indigo-200' : 'text-indigo-500'}`}>Node Status</span>
                             <h4 className="text-xl font-black text-white italic uppercase tracking-tighter">{status.text}</h4>
@@ -315,11 +316,22 @@ const StudentDashboard = ({ activeTab: initialTabProp = 'dashboard' }) => {
                     </div>
                 </div>
             </div>
+
+            {/* Dashboard Ending Sign Out Button */}
+            <div className="flex justify-center pt-12 pb-8">
+                <button
+                    onClick={signout}
+                    className="flex items-center gap-3 px-10 py-5 bg-rose-50 text-rose-600 rounded-2xl text-[10px] font-black uppercase tracking-[0.3em] shadow-sm hover:bg-rose-600 hover:text-white transition-all active:scale-95 group border border-rose-100"
+                >
+                    <LogOut size={16} className="group-hover:rotate-12 transition-transform" />
+                    Terminate Student Session
+                </button>
+            </div>
         </div>
     );
 
     const ProfileView = () => (
-        <div className="max-w-4xl mx-auto space-y-12 animate-in slide-in-from-bottom-4 duration-700 text-left bg-white p-8 md:p-12 min-h-screen">
+        <div className="max-w-4xl mx-auto space-y-12 animate-in slide-in-from-bottom-4 duration-700 text-left bg-white p-4 sm:p-8 md:p-12 min-h-screen">
             <BackButton title="Profile Details" />
 
             {/* Personal Details Section */}
@@ -328,7 +340,7 @@ const StudentDashboard = ({ activeTab: initialTabProp = 'dashboard' }) => {
                     <h3 className="text-xl font-semibold text-slate-900">Personal Details</h3>
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-y-8 gap-x-12">
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 gap-y-8 gap-x-12">
                     <div className="space-y-1">
                         <p className="text-[13px] text-slate-500 font-medium">Gender</p>
                         <p className="text-lg font-semibold text-slate-900 uppercase">{studentData.gender}</p>
@@ -370,7 +382,7 @@ const StudentDashboard = ({ activeTab: initialTabProp = 'dashboard' }) => {
                     <h3 className="text-xl font-semibold text-slate-900">Academic Details</h3>
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-y-8 gap-x-12">
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 gap-y-8 gap-x-12">
                     <div className="space-y-1">
                         <p className="text-[13px] text-slate-500 font-medium">Roll number</p>
                         <p className="text-lg font-semibold text-slate-900 uppercase">{studentData.rollNumber}</p>
@@ -409,7 +421,7 @@ const StudentDashboard = ({ activeTab: initialTabProp = 'dashboard' }) => {
         const chartValues = [150, 100, 50, 0];
 
         return (
-            <div className="max-w-4xl mx-auto space-y-12 animate-in slide-in-from-bottom-4 duration-700 text-left bg-white p-8 md:p-12 min-h-screen -mt-[60px]">
+            <div className="max-w-4xl mx-auto space-y-12 animate-in slide-in-from-bottom-4 duration-700 text-left bg-white p-4 sm:p-8 md:p-12 min-h-screen -mt-[60px]">
                 <BackButton title="Overall Attendance" />
 
                 {/* Bar Chart Container */}
@@ -467,7 +479,7 @@ const StudentDashboard = ({ activeTab: initialTabProp = 'dashboard' }) => {
     const PerformanceModule = () => (
         <div className="space-y-10 animate-in slide-in-from-bottom-4 duration-700 text-left">
             <BackButton title="Performance Pulse" />
-            <div className="bg-white rounded-[3.5rem] p-12 border border-slate-100 shadow-sm space-y-12">
+            <div className="bg-white rounded-[3.5rem] p-6 sm:p-12 border border-slate-100 shadow-sm space-y-12">
                 <div className="flex items-center justify-between">
                     <div className="space-y-1">
                         <h2 className="text-4xl font-black text-slate-900 tracking-tightest uppercase italic">Performance Pulse</h2>
@@ -475,7 +487,7 @@ const StudentDashboard = ({ activeTab: initialTabProp = 'dashboard' }) => {
                     </div>
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-8">
                     {performanceData.map((item, i) => {
                         const isCurrent = item.sem === 'Sem 6';
                         return (
@@ -510,7 +522,7 @@ const StudentDashboard = ({ activeTab: initialTabProp = 'dashboard' }) => {
         return (
             <div className="space-y-10 animate-in slide-in-from-bottom-4 duration-700 text-left">
                 <BackButton title="Institutional Timetable" />
-                <div className="bg-white rounded-[3.5rem] p-12 border border-slate-100 shadow-sm space-y-12">
+                <div className="bg-white rounded-[3.5rem] p-4 sm:p-12 border border-slate-100 shadow-sm space-y-12 overflow-x-auto">
                     <div className="flex items-center justify-between">
                         <div className="space-y-1">
                             <h2 className="text-4xl font-black text-slate-900 tracking-tightest uppercase italic">Institutional Timetable</h2>
@@ -560,8 +572,8 @@ const StudentDashboard = ({ activeTab: initialTabProp = 'dashboard' }) => {
     };
 
     return (
-        <DashboardLayout role="student">
-            <div className="max-w-7xl mx-auto pt-2 px-8 pb-32 -mt-3">
+        <DashboardLayout role="student" burgerMenuPosition="left" burgerMenuSize="lg">
+            <div className="max-w-7xl mx-auto pt-2 px-2 sm:px-8 pb-32 -mt-3">
                 <style>
                     {`
                     @import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,400;0,700;0,900;1,400;1,700;1,900&display=swap');
@@ -585,6 +597,8 @@ const StudentDashboard = ({ activeTab: initialTabProp = 'dashboard' }) => {
                             {activeTab === 'profile' && <ProfileView />}
                         </motion.div>
                     </AnimatePresence>
+                    {/* Bottom Navigation Buttons - Mobile & Desktop, larger size */}
+                    {/* Bottom Navigation Removed as per request */}
                 </div>
             </div>
         </DashboardLayout>

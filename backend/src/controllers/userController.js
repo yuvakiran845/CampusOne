@@ -79,8 +79,64 @@ const getMe = async (req, res) => {
     res.status(200).json(req.user);
 };
 
+// @desc    Forgot password - Send OTP
+// @route   POST /api/users/forgotpassword
+// @access  Public
+const forgotPassword = async (req, res) => {
+    const { email } = req.body;
+
+    const user = await User.findOne({ email });
+
+    if (!user) {
+        return res.status(404).json({ message: 'User not found' });
+    }
+
+    // Generate 6-digit OTP
+    const otp = Math.floor(100000 + Math.random() * 900000).toString();
+
+    // Set OTP and expiry (10 minutes)
+    user.otpCode = otp;
+    user.otpExpire = Date.now() + 10 * 60 * 1000;
+    await user.save();
+
+    // In a real app, send email here. For now, log to console and return in response for testing
+    console.log(`OTP for ${email}: ${otp}`);
+
+    res.json({
+        message: 'OTP sent to your email (simulated)',
+        otp: process.env.NODE_ENV === 'development' ? otp : undefined
+    });
+};
+
+// @desc    Reset password using OTP
+// @route   POST /api/users/resetpassword
+// @access  Public
+const resetPassword = async (req, res) => {
+    const { email, otp, newPassword } = req.body;
+
+    const user = await User.findOne({
+        email,
+        otpCode: otp,
+        otpExpire: { $gt: Date.now() }
+    });
+
+    if (!user) {
+        return res.status(400).json({ message: 'Invalid or expired OTP' });
+    }
+
+    // Set new password
+    user.password = newPassword;
+    user.otpCode = undefined;
+    user.otpExpire = undefined;
+    await user.save();
+
+    res.json({ message: 'Password reset successful' });
+};
+
 module.exports = {
     registerUser,
     authUser,
     getMe,
+    forgotPassword,
+    resetPassword,
 };

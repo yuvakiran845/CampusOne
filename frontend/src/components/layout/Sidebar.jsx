@@ -63,7 +63,7 @@ const Sidebar = ({ role = 'student' }) => {
             </div>
 
             {/* Navigation */}
-            <nav className="flex-1 px-4 py-8 space-y-2">
+            <nav className="flex-1 px-4 py-8 space-y-2 overflow-y-auto custom-scrollbar">
                 {currentLinks.map((link) => {
                     const Icon = link.icon;
                     const isActive = location.pathname === link.path;
@@ -95,13 +95,13 @@ const Sidebar = ({ role = 'student' }) => {
                 })}
             </nav>
 
-            {/* Footer */}
-            <div className="p-6 border-t border-slate-50">
+            {/* Footer - Add extra bottom padding for mobile to avoid bottom nav overlap */}
+            <div className="p-6 border-t border-slate-50 mb-16 lg:mb-0">
                 <button
                     onClick={signout}
-                    className="flex items-center w-full px-5 py-4 text-xs font-black text-slate-400 hover:text-rose-600 hover:bg-rose-50 rounded-2xl transition-all uppercase tracking-widest"
+                    className="flex items-center w-full px-5 py-4 text-xs font-black text-slate-400 hover:text-rose-600 hover:bg-rose-50 rounded-2xl transition-all uppercase tracking-widest group"
                 >
-                    <LogOut size={18} className="mr-3" />
+                    <LogOut size={18} className="mr-3 group-hover:rotate-12 transition-transform" />
                     <span>Sign Out</span>
                 </button>
             </div>

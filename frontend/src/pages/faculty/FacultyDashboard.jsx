@@ -23,7 +23,8 @@ import {
     Users,
     Settings as SettingsIcon,
     Globe,
-    ShieldCheck
+    ShieldCheck,
+    LogOut
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useLocation, useNavigate } from 'react-router-dom';
@@ -31,7 +32,7 @@ import AuthContext from '../../context/AuthContext';
 import DashboardLayout from '../../components/layout/DashboardLayout';
 
 const FacultyDashboard = ({ activeTab: initialTab = 'dashboard' }) => {
-    const { user, loading } = useContext(AuthContext);
+    const { user, loading, signout } = useContext(AuthContext);
     const location = useLocation();
     const navigate = useNavigate();
     const [activeTab, setActiveTab] = useState(initialTab);
@@ -138,7 +139,7 @@ const FacultyDashboard = ({ activeTab: initialTab = 'dashboard' }) => {
             whileHover={{ y: -3, scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
             onClick={onClick}
-            className="bg-white p-6 rounded-[2rem] border border-slate-100 shadow-sm hover:shadow-xl transition-all cursor-pointer group flex items-center gap-6 text-left"
+            className="bg-white p-6 rounded-3xl md:rounded-[2rem] border border-slate-100 shadow-sm hover:shadow-xl transition-all cursor-pointer group flex items-center gap-6 text-left"
         >
             <div className={`w-14 h-14 rounded-2xl ${color} flex items-center justify-center shrink-0 shadow-md group-hover:scale-110 transition-all`}>
                 <Icon size={24} className="text-white" />
@@ -159,8 +160,8 @@ const FacultyDashboard = ({ activeTab: initialTab = 'dashboard' }) => {
         <div className="space-y-12 animate-in fade-in slide-in-from-bottom-8 duration-700">
             <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-8 pt-4">
                 <div className="space-y-4 text-left">
-                    <div className="space-y-1">
-                        <h1 className="text-4xl md:text-5xl font-black text-slate-900 tracking-tighter leading-none">
+                    <div className="space-y-1 text-left">
+                        <h1 className="text-4xl md:text-6xl font-black text-slate-900 tracking-tighter leading-tight">
                             FACULTY <span className="text-slate-200">HUB.</span>
                         </h1>
                         <div className="flex items-center gap-2">
@@ -173,7 +174,7 @@ const FacultyDashboard = ({ activeTab: initialTab = 'dashboard' }) => {
                 </div>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-8">
                 <FeatureCard
                     title="Attendance"
                     label="Session Sync"
@@ -214,13 +215,24 @@ const FacultyDashboard = ({ activeTab: initialTab = 'dashboard' }) => {
                 />
             </div>
 
-            <div className="bg-white rounded-[3rem] p-10 border border-slate-50 shadow-sm flex flex-col md:flex-row items-center justify-between gap-8">
+            <div className="bg-white rounded-3xl md:rounded-[3rem] p-6 sm:p-10 border border-slate-50 shadow-sm flex flex-col md:flex-row items-center justify-between gap-8">
                 <div className="text-left space-y-1">
                     <h3 className="text-2xl font-black text-slate-900 tracking-tighter leading-none">Recent Sync Operations</h3>
                     <p className="text-[9px] font-black text-slate-300 uppercase tracking-widest">Historical Node Audit Log</p>
                 </div>
                 <button className="px-10 py-5 bg-slate-50 text-slate-400 font-black text-[10px] uppercase tracking-[0.3em] rounded-2xl hover:bg-slate-950 hover:text-white transition-all shadow-sm">
                     Archive
+                </button>
+            </div>
+
+            {/* Dashboard Ending Sign Out Button */}
+            <div className="flex justify-center pt-8">
+                <button
+                    onClick={signout}
+                    className="flex items-center gap-3 px-10 py-5 bg-rose-50 text-rose-600 rounded-2xl text-[10px] font-black uppercase tracking-[0.3em] shadow-sm hover:bg-rose-600 hover:text-white transition-all active:scale-95 group border border-rose-100"
+                >
+                    <LogOut size={16} className="group-hover:rotate-12 transition-transform" />
+                    Terminate Faculty Session
                 </button>
             </div>
         </div>
@@ -306,12 +318,12 @@ const FacultyDashboard = ({ activeTab: initialTab = 'dashboard' }) => {
 
         return (
             <div className="space-y-12 animate-in slide-in-from-bottom-6 duration-700 text-left pt-10">
-                <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-8">
+                <div className="flex flex-col sm:flex-row md:flex-row justify-between items-start md:items-end gap-8">
                     <div className="space-y-4">
                         <BackButton />
                         <h1 className="text-5xl font-black text-slate-900 tracking-tighter leading-none">Attendance <span className="text-slate-200">Sync.</span></h1>
                     </div>
-                    <div className="flex bg-slate-50 p-2 rounded-[1.5rem] border border-slate-100">
+                    <div className="flex bg-slate-50 p-2 rounded-[1.5rem] border border-slate-100 flex-wrap">
                         {sections.map(sec => (
                             <button
                                 key={sec}
@@ -332,7 +344,7 @@ const FacultyDashboard = ({ activeTab: initialTab = 'dashboard' }) => {
                         </div>
                     </div>
 
-                    <div className="grid grid-cols-4 sm:grid-cols-6 md:grid-cols-8 lg:grid-cols-10 gap-3">
+                    <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-10 gap-3">
                         {studentsBySection[selectedSection].map(student => {
                             const isPresent = attendanceMap[selectedSection]?.[student.roll];
                             return (
@@ -350,7 +362,7 @@ const FacultyDashboard = ({ activeTab: initialTab = 'dashboard' }) => {
                         })}
                     </div>
 
-                    <div className="mt-12 p-10 bg-slate-950 rounded-[3rem] text-white flex flex-col md:flex-row items-center justify-between gap-8 relative overflow-hidden group">
+                    <div className="mt-12 p-6 sm:p-10 bg-slate-950 rounded-[3rem] text-white flex flex-col md:flex-row items-center justify-between gap-8 relative overflow-hidden group">
                         <div className="absolute top-0 right-0 p-12 opacity-5 scale-150 rotate-12"><ClipboardCheck size={140} /></div>
                         <div className="space-y-2 relative z-10 text-left">
                             <h3 className="text-3xl font-black tracking-tighter leading-none uppercase italic">Finalize Synchronization</h3>
@@ -398,12 +410,12 @@ const FacultyDashboard = ({ activeTab: initialTab = 'dashboard' }) => {
 
         return (
             <div className="space-y-12 animate-in slide-in-from-bottom-6 duration-700 text-left pt-10">
-                <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-8">
+                <div className="flex flex-col sm:flex-row md:flex-row justify-between items-start md:items-end gap-8">
                     <div className="space-y-4">
                         <BackButton />
                         <h1 className="text-5xl font-black text-slate-900 tracking-tighter leading-none">Marks <span className="text-slate-200">Vault.</span></h1>
                     </div>
-                    <div className="flex bg-slate-50 p-2 rounded-[1.5rem] border border-slate-100">
+                    <div className="flex bg-slate-50 p-2 rounded-[1.5rem] border border-slate-100 flex-wrap">
                         {sections.map(sec => (
                             <button
                                 key={sec}
@@ -416,7 +428,7 @@ const FacultyDashboard = ({ activeTab: initialTab = 'dashboard' }) => {
                     </div>
                 </div>
 
-                <div className="bg-white rounded-[3.5rem] p-10 md:p-12 border border-slate-50 shadow-sm space-y-10">
+                <div className="bg-white rounded-[3.5rem] p-4 sm:p-10 md:p-12 border border-slate-50 shadow-sm space-y-10 overflow-x-auto">
                     <div className="flex items-center justify-between border-b border-slate-50 pb-8">
                         <div className="space-y-1">
                             <h2 className="text-2xl font-black text-slate-900 tracking-tighter uppercase italic">Internal Yield Matrix</h2>
@@ -495,7 +507,7 @@ const FacultyDashboard = ({ activeTab: initialTab = 'dashboard' }) => {
                             </tbody>
                         </table>
 
-                        <div className="mt-16 p-10 bg-slate-950 rounded-[3rem] text-white flex flex-col md:flex-row items-center justify-between gap-8 relative overflow-hidden group shadow-2xl">
+                        <div className="mt-16 p-6 sm:p-10 bg-slate-950 rounded-[3rem] text-white flex flex-col md:flex-row items-center justify-between gap-8 relative overflow-hidden group shadow-2xl">
                             <div className="absolute top-0 right-0 p-12 opacity-5 scale-150 rotate-12"><Award size={140} /></div>
                             <div className="space-y-3 relative z-10 text-left">
                                 <h3 className="text-3xl font-black tracking-tighter leading-none uppercase italic">Finalize Academic Yield</h3>
@@ -521,7 +533,7 @@ const FacultyDashboard = ({ activeTab: initialTab = 'dashboard' }) => {
                 <h1 className="text-5xl font-black text-slate-900 tracking-tighter leading-none">Global <span className="text-slate-200">Feed.</span></h1>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 gap-10">
                 {[
                     {
                         title: "Future Builders Hackathon",
@@ -565,7 +577,7 @@ const FacultyDashboard = ({ activeTab: initialTab = 'dashboard' }) => {
     );
 
     const ProfileModule = () => (
-        <div className="max-w-4xl mx-auto space-y-12 animate-in slide-in-from-bottom-6 duration-700 text-left bg-white p-8 md:p-12 min-h-screen pt-10 rounded-[3rem] shadow-sm">
+        <div className="max-w-4xl mx-auto space-y-12 animate-in slide-in-from-bottom-6 duration-700 text-left bg-white p-4 sm:p-8 md:p-12 min-h-screen pt-10 rounded-[3rem] shadow-sm">
             <BackButton />
 
             <div className="space-y-2 border-b border-slate-200 pb-6">
@@ -578,7 +590,7 @@ const FacultyDashboard = ({ activeTab: initialTab = 'dashboard' }) => {
                     <h3 className="text-xl font-semibold text-slate-900">Personal Details</h3>
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-y-8 gap-x-12">
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 gap-y-8 gap-x-12">
                     <div className="space-y-1">
                         <p className="text-[13px] text-slate-500 font-medium">Full Name</p>
                         <p className="text-lg font-semibold text-slate-900 uppercase">{facultyDetails.name}</p>
@@ -611,7 +623,7 @@ const FacultyDashboard = ({ activeTab: initialTab = 'dashboard' }) => {
                     <h3 className="text-xl font-semibold text-slate-900">Institutional Details</h3>
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-y-8 gap-x-12">
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 gap-y-8 gap-x-12">
                     <div className="space-y-1">
                         <p className="text-[13px] text-slate-500 font-medium">Faculty ID</p>
                         <p className="text-lg font-semibold text-slate-900 uppercase">{facultyDetails.id}</p>
@@ -646,7 +658,7 @@ const FacultyDashboard = ({ activeTab: initialTab = 'dashboard' }) => {
     );
 
     const SettingsModule = () => (
-        <div className="max-w-4xl mx-auto space-y-12 animate-in slide-in-from-bottom-6 duration-700 text-left bg-white p-8 md:p-12 min-h-screen pt-10 rounded-[3rem] shadow-sm">
+        <div className="max-w-4xl mx-auto space-y-12 animate-in slide-in-from-bottom-6 duration-700 text-left bg-white p-4 sm:p-8 md:p-12 min-h-screen pt-10 rounded-[3rem] shadow-sm">
             <BackButton />
 
             <div className="space-y-2 border-b border-slate-200 pb-6">
@@ -661,7 +673,7 @@ const FacultyDashboard = ({ activeTab: initialTab = 'dashboard' }) => {
                     <h3 className="text-xl font-semibold text-slate-900">College Details</h3>
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-y-8 gap-x-12">
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 gap-y-8 gap-x-12">
                     <div className="space-y-1">
                         <p className="text-[13px] text-slate-500 font-medium">Institutional Name</p>
                         <p className="text-lg font-black text-slate-900 uppercase">{collegeDetails.name}</p>
@@ -706,7 +718,7 @@ const FacultyDashboard = ({ activeTab: initialTab = 'dashboard' }) => {
                     <h3 className="text-xl font-semibold text-slate-900">Department Overview</h3>
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-y-8 gap-x-12">
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 gap-y-8 gap-x-12">
                     <div className="space-y-1 md:col-span-2">
                         <p className="text-[13px] text-slate-500 font-medium">Department Name</p>
                         <p className="text-xl font-black text-slate-900 uppercase">{departmentDetails.name}</p>
@@ -740,8 +752,8 @@ const FacultyDashboard = ({ activeTab: initialTab = 'dashboard' }) => {
     );
 
     return (
-        <DashboardLayout role="faculty">
-            <div className="max-w-7xl mx-auto py-12 px-8 pb-32">
+        <DashboardLayout role="faculty" burgerMenuPosition="left" burgerMenuSize="lg">
+            <div className="max-w-7xl mx-auto py-12 px-2 sm:px-8 pb-32">
                 <style>
                     {`
                     @import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,400;0,700;0,900;1,400;1,700;1,900&display=swap');
@@ -749,23 +761,27 @@ const FacultyDashboard = ({ activeTab: initialTab = 'dashboard' }) => {
                     .faculty-erp-font h1, .faculty-erp-font h2, .faculty-erp-font h3, .faculty-erp-font h4 { font-family: 'Poppins', sans-serif; }
                     `}
                 </style>
-                <div className="faculty-erp-font mt-[-100px]">
-                    <AnimatePresence mode="wait">
-                        <motion.div
-                            key={activeTab}
-                            initial={{ opacity: 0, y: 20 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            exit={{ opacity: 0, y: -20 }}
-                            transition={{ duration: 0.4 }}
-                        >
-                            {activeTab === 'dashboard' && <Overview />}
-                            {activeTab === 'attendance' && <AttendanceModule />}
-                            {activeTab === 'marks' && <MarksModule />}
-                            {activeTab === 'notices' && <AnnouncementsModule />}
-                            {activeTab === 'profile' && <ProfileModule />}
-                            {activeTab === 'settings' && <SettingsModule />}
-                        </motion.div>
-                    </AnimatePresence>
+                <div className="faculty-erp-font mt-0">
+                    {/* Move hero section down for mobile */}
+                    <div className="pt-8 sm:pt-0">
+                        <AnimatePresence mode="wait">
+                            <motion.div
+                                key={activeTab}
+                                initial={{ opacity: 0, y: 20 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                exit={{ opacity: 0, y: -20 }}
+                                transition={{ duration: 0.4 }}
+                            >
+                                {activeTab === 'dashboard' && <Overview />}
+                                {activeTab === 'attendance' && <AttendanceModule />}
+                                {activeTab === 'marks' && <MarksModule />}
+                                {activeTab === 'notices' && <AnnouncementsModule />}
+                                {activeTab === 'profile' && <ProfileModule />}
+                                {activeTab === 'settings' && <SettingsModule />}
+                            </motion.div>
+                        </AnimatePresence>
+                    </div>
+                    {/* Bottom Navigation removed for DashboardLayout to handle mobile nav */}
                 </div>
             </div>
         </DashboardLayout>

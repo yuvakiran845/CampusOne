@@ -14,7 +14,7 @@ import { Link, useLocation } from 'react-router-dom';
 import AuthContext from '../../context/AuthContext';
 import clsx from 'clsx';
 
-const DashboardLayout = ({ children, role, onProfileClick }) => {
+const DashboardLayout = ({ children, role }) => {
     const [sidebarOpen, setSidebarOpen] = useState(false);
     const location = useLocation();
     const { user } = useContext(AuthContext);

@@ -36,6 +36,14 @@ export const AuthProvider = ({ children }) => {
         window.location.href = '/login';
     };
 
+    const forgotPassword = async (email) => {
+        return await authService.forgotPassword(email);
+    };
+
+    const resetPassword = async (resetData) => {
+        return await authService.resetPassword(resetData);
+    };
+
     if (loading) {
         return (
             <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', backgroundColor: '#F8FAFC' }}>
@@ -46,7 +54,10 @@ export const AuthProvider = ({ children }) => {
     }
 
     return (
-        <AuthContext.Provider value={{ user, login, signout, loading, searchQuery, setSearchQuery }}>
+        <AuthContext.Provider value={{
+            user, login, signout, loading, searchQuery, setSearchQuery,
+            forgotPassword, resetPassword
+        }}>
             {children}
         </AuthContext.Provider>
     );

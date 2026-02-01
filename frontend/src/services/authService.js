@@ -24,10 +24,22 @@ const getCurrentUser = () => {
     }
 };
 
+const forgotPassword = async (email) => {
+    const response = await API.post('/users/forgotpassword', { email });
+    return response.data;
+};
+
+const resetPassword = async (resetData) => {
+    const response = await API.post('/users/resetpassword', resetData);
+    return response.data;
+};
+
 const authService = {
     login,
     signout,
     getCurrentUser,
+    forgotPassword,
+    resetPassword,
 };
 
 export default authService;

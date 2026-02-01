@@ -26,6 +26,12 @@ const userSchema = new mongoose.Schema({
         enum: ['student', 'faculty', 'admin'],
         default: 'student',
     },
+    otpCode: {
+        type: String,
+    },
+    otpExpire: {
+        type: Date,
+    },
     createdAt: {
         type: Date,
         default: Date.now,

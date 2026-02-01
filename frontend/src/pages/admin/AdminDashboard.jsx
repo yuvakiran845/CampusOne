@@ -27,14 +27,15 @@ import {
     Clock,
     Filter,
     Save,
-    BookOpen
+    BookOpen,
+    LogOut
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import AuthContext from '../../context/AuthContext';
 import DashboardLayout from '../../components/layout/DashboardLayout';
 
 const AdminDashboard = ({ activeTab: initialTab = 'dashboard' }) => {
-    const { user, searchQuery, setSearchQuery } = useContext(AuthContext);
+    const { user, searchQuery, setSearchQuery, signout } = useContext(AuthContext);
     const [activeTab, setActiveTab] = useState(initialTab);
     const [isSaving, setIsSaving] = useState(false);
 
@@ -47,7 +48,7 @@ const AdminDashboard = ({ activeTab: initialTab = 'dashboard' }) => {
             whileHover={{ y: -5, scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
             onClick={onClick}
-            className="bg-white p-8 rounded-[2.5rem] border border-slate-100 shadow-sm hover:shadow-2xl transition-all cursor-pointer group relative overflow-hidden text-left"
+            className="bg-white p-6 md:p-8 rounded-3xl md:rounded-[2.5rem] border border-slate-100 shadow-sm hover:shadow-2xl transition-all cursor-pointer group relative overflow-hidden text-left"
         >
             <div className={`w-14 h-14 rounded-2xl ${color} flex items-center justify-center mb-6 group-hover:scale-110 transition-all shadow-lg shadow-current/20`}>
                 <Icon size={28} className="text-white" />
@@ -134,7 +135,7 @@ const AdminDashboard = ({ activeTab: initialTab = 'dashboard' }) => {
             </div>
 
             {/* Quick Metrics */}
-            <div className="bg-slate-950 rounded-[3rem] p-10 text-white shadow-2xl space-y-10 relative overflow-hidden group text-left">
+            <div className="bg-slate-950 rounded-3xl md:rounded-[3rem] p-6 md:p-10 text-white shadow-2xl space-y-10 relative overflow-hidden group text-left">
                 <div className="absolute top-0 right-0 p-12 opacity-5 scale-150 rotate-12"><Zap size={140} /></div>
                 <div className="flex items-center justify-between relative z-10">
                     <h3 className="text-2xl font-black tracking-tighter uppercase italic text-orange-500 leading-none">Live System Throughput</h3>
@@ -153,6 +154,17 @@ const AdminDashboard = ({ activeTab: initialTab = 'dashboard' }) => {
                         </div>
                     ))}
                 </div>
+            </div>
+
+            {/* Dashboard Ending Sign Out Button */}
+            <div className="flex justify-center pt-8">
+                <button
+                    onClick={signout}
+                    className="flex items-center gap-3 px-10 py-5 bg-rose-50 text-rose-600 rounded-2xl text-[10px] font-black uppercase tracking-[0.3em] shadow-sm hover:bg-rose-600 hover:text-white transition-all active:scale-95 group border border-rose-100"
+                >
+                    <LogOut size={16} className="group-hover:rotate-12 transition-transform" />
+                    Terminate Admin Session
+                </button>
             </div>
         </div>
     );
