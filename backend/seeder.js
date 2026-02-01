@@ -16,19 +16,19 @@ const importData = async () => {
 
         const users = [
             {
-                name: 'John Student',
+                name: 'Yuva Kiran',
                 email: 'student@campus.edu',
                 password: 'password123',
                 role: 'student',
             },
             {
-                name: 'Jane Faculty',
+                name: 'Dr. Ramesh Kumar',
                 email: 'faculty@campus.edu',
                 password: 'password123',
                 role: 'faculty',
             },
             {
-                name: 'Super Admin',
+                name: 'CampusOne Admin',
                 email: 'admin@campus.edu',
                 password: 'password123',
                 role: 'admin',

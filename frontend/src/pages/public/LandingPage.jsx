@@ -1,552 +1,493 @@
 import {
     Users,
-    BookOpen,
     GraduationCap,
-    ShieldCheck,
     ChevronRight,
-    Play,
     LayoutDashboard,
-    CalendarDays,
     Menu,
     X,
     Mail,
     Phone,
     MapPin,
-    Send,
-    CheckCircle2,
-    Globe
+    Instagram,
+    Linkedin,
+    Youtube,
+    ClipboardCheck,
+    LineChart,
+    Bell,
+    ArrowRight
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
-import { motion, useScroll, useTransform } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { useState, useEffect } from 'react';
+import CollegeImageSlider from '../../components/CollegeImageSlider';
+
+// --- Sub-Components ---
 
 const Navbar = () => {
     const navigate = useNavigate();
     const [scrolled, setScrolled] = useState(false);
+    const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
     useEffect(() => {
-        const handleScroll = () => setScrolled(window.scrollY > 20);
+        const handleScroll = () => {
+            setScrolled(window.scrollY > 20);
+        };
         window.addEventListener('scroll', handleScroll);
         return () => window.removeEventListener('scroll', handleScroll);
     }, []);
 
+    const navLinks = [
+        { name: 'Features', path: '#features' },
+        { name: 'About', path: '#about' },
+        { name: 'Contact', path: '#contact' }
+    ];
+
     return (
-        <motion.nav
-            initial={{ y: -100 }}
-            animate={{ y: 0 }}
-            transition={{ duration: 0.5 }}
-            className={`sticky top-0 w-full z-50 bg-white shadow-lg transition-all duration-300 py-3`} // Always solid background, shadow, sticky
+        <header
+            className={`fixed top-0 w-full z-50 transition-all duration-500 ease-in-out px-4 md:px-8 py-4 md:py-6`}
         >
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full flex items-center justify-between py-2">
-                <motion.div
-                    whileHover={{ scale: 1.05 }}
-                    className="flex items-center space-x-3 cursor-pointer"
+            <nav
+                className={`max-w-7xl mx-auto flex items-center justify-between transition-all duration-500 rounded-[2.5rem] px-6 py-2 ${scrolled
+                    ? 'bg-white/80 backdrop-blur-2xl border border-white/40 shadow-[0_8px_32px_0_rgba(31,38,135,0.07)]'
+                    : 'bg-transparent'
+                    }`}
+            >
+                {/* Logo Section */}
+                <div
+                    className="flex items-center gap-3 cursor-pointer group shrink-0"
                     onClick={() => navigate('/')}
                 >
-                    <div className="bg-gradient-to-br from-orange-500 to-red-600 p-2.5 rounded-xl shadow-lg">
-                        <GraduationCap className="text-white w-7 h-7" />
+                    <div className="bg-orange-600 p-2 rounded-2xl text-white shadow-xl shadow-orange-600/20 group-hover:rotate-12 transition-all duration-500">
+                        <GraduationCap className="w-5 h-5 md:w-6 md:h-6" />
                     </div>
-                    <span className="text-2xl font-bold tracking-tight text-slate-900">CampusOne</span>
-                </motion.div>
-
-                <div className="hidden md:flex items-center space-x-10">
-                    {['Features', 'About', 'Contact'].map((item) => (
-                        <a
-                            key={item}
-                            href={`#${item.toLowerCase()}`}
-                            className="relative font-medium text-lg tracking-wide text-slate-700 group transition-colors duration-200"
-                        >
-                            {item}
-                            <span className="absolute left-0 -bottom-1 w-0 h-0.5 bg-gradient-to-r from-orange-500 to-red-500 transition-all duration-300 group-hover:w-full"></span>
-                            <span className="block h-0.5 bg-gradient-to-r from-orange-500 to-red-500 scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left"></span>
-                        </a>
-                    ))}
+                    <div className="flex flex-col">
+                        <span className={`text-xl font-black tracking-tight leading-none transition-colors duration-500 ${scrolled ? 'text-slate-950' : 'text-white'}`}>
+                            CampusOne
+                        </span>
+                        <span className={`text-[8px] font-black uppercase tracking-[0.2em] mt-1 transition-colors duration-500 ${scrolled ? 'text-slate-400' : 'text-white/60'}`}>
+                            University Intelligence
+                        </span>
+                    </div>
                 </div>
 
-                <div className="flex items-center space-x-6">
-                    <motion.button
-                        whileHover={{ scale: 1.05 }}
-                        whileTap={{ scale: 0.95 }}
+                {/* Right Side Navigation Items */}
+                <div className="hidden lg:flex items-center gap-6 ml-auto">
+                    {/* Portal Buttons - Clean Text to Orange Box on Scroll */}
+                    <button
                         onClick={() => navigate('/login')}
-                        className="font-semibold text-lg text-slate-700 hover:text-orange-600 transition-colors duration-200"
+                        className={`group px-5 py-2.5 rounded-2xl text-[12px] font-black uppercase tracking-wider transition-all duration-500 hover:scale-105 active:scale-95 flex items-center gap-2
+                            ${scrolled
+                                ? 'bg-orange-600 text-white shadow-xl shadow-orange-600/40 border-none'
+                                : 'text-white bg-white/10 backdrop-blur-md border border-white/20 hover:bg-white/20'
+                            }`}
+                    >
+                        <Users size={16} className={`transition-transform duration-500 group-hover:rotate-12 ${scrolled ? 'text-white' : 'text-orange-500'}`} />
+                        <span>Student Portal</span>
+                    </button>
+                    <button
+                        onClick={() => navigate('/login')}
+                        className={`group px-5 py-2.5 rounded-2xl text-[12px] font-black uppercase tracking-wider transition-all duration-500 hover:scale-105 active:scale-95 flex items-center gap-2
+                            ${scrolled
+                                ? 'bg-orange-600 text-white shadow-xl shadow-orange-600/40 border-none'
+                                : 'text-white bg-white/10 backdrop-blur-md border border-white/20 hover:bg-white/20'
+                            }`}
+                    >
+                        <GraduationCap size={16} className={`transition-transform duration-500 group-hover:-rotate-12 ${scrolled ? 'text-white' : 'text-orange-500'}`} />
+                        <span>Faculty Portal</span>
+                    </button>
+
+                    {/* Section Links */}
+                    <div className="flex items-center gap-2 mx-2">
+                        {navLinks.map((link) => (
+                            <a
+                                key={link.name}
+                                href={link.path}
+                                className={`px-4 py-2 text-[13px] font-bold tracking-tight rounded-xl transition-all duration-300 relative group
+                                    ${scrolled ? 'text-slate-600 hover:text-orange-600 hover:bg-slate-50' : 'text-white/80 hover:text-white'}`}
+                            >
+                                {link.name}
+                                <span className="absolute bottom-1.5 left-4 right-4 h-0.5 bg-orange-600 scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left" />
+                            </a>
+                        ))}
+                    </div>
+
+                    {/* Final Sign In Button - Ultra High Contrast */}
+                    <button
+                        onClick={() => navigate('/login')}
+                        className={`ml-4 px-8 py-3 rounded-2xl text-[13px] font-black uppercase tracking-[0.1em] transition-all duration-500 shadow-2xl hover:scale-110 active:scale-95
+                            ${scrolled
+                                ? 'bg-orange-600 text-white'
+                                : 'bg-white text-orange-600 border border-white hover:bg-orange-600 hover:text-white shadow-white/10'
+                            }`}
                     >
                         Sign In
-                    </motion.button>
-                    <motion.button
-                        whileHover={{ scale: 1.07, boxShadow: "0 10px 30px -5px rgba(249, 115, 22, 0.5)" }}
-                        whileTap={{ scale: 0.97 }}
-                        onClick={() => navigate('/login')}
-                        className="px-8 py-3 bg-gradient-to-r from-orange-500 to-red-600 text-white rounded-full font-bold shadow-lg flex items-center tracking-wide transition-all duration-300 ease-in-out"
-                    >
-                        Get Started
-                        <ChevronRight className="w-5 h-5 ml-1" />
-                    </motion.button>
+                    </button>
                 </div>
-            </div>
-        </motion.nav>
+
+                {/* Mobile Specific Logic */}
+                <button
+                    className={`p-2.5 rounded-2xl transition-all lg:hidden ml-4 ${scrolled || mobileMenuOpen ? 'text-slate-900 bg-slate-100' : 'text-white bg-white/10'}`}
+                    onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+                >
+                    {mobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
+                </button>
+            </nav>
+
+            {/* Mobile Menu Overlay - Premium Expand */}
+            <AnimatePresence>
+                {mobileMenuOpen && (
+                    <motion.div
+                        initial={{ opacity: 0, y: -20, scale: 0.95 }}
+                        animate={{ opacity: 1, y: 0, scale: 1 }}
+                        exit={{ opacity: 0, y: -20, scale: 0.95 }}
+                        className="mt-4 max-w-7xl mx-auto"
+                    >
+                        <div className="bg-white rounded-[2.5rem] border border-slate-100 shadow-2xl p-8 space-y-6">
+                            <div className="grid grid-cols-2 gap-4">
+                                <button onClick={() => navigate('/login')} className="p-6 bg-orange-600 rounded-3xl text-white font-black text-center shadow-xl shadow-orange-600/20">
+                                    STUDENT
+                                </button>
+                                <button onClick={() => navigate('/login')} className="p-6 bg-slate-950 rounded-3xl text-white font-black text-center shadow-xl">
+                                    FACULTY
+                                </button>
+                            </div>
+                            <div className="flex flex-col gap-2">
+                                {navLinks.map((link) => (
+                                    <a key={link.name} href={link.path} onClick={() => setMobileMenuOpen(false)} className="px-6 py-4 bg-slate-50 rounded-2xl text-slate-905 font-bold flex justify-between items-center">
+                                        {link.name}
+                                        <ChevronRight size={18} className="text-slate-400" />
+                                    </a>
+                                ))}
+                            </div>
+                        </div>
+                    </motion.div>
+                )}
+            </AnimatePresence>
+        </header>
     );
 };
 
-const FeatureCard = ({ feature, index }) => (
-    <motion.div
-        initial={{ opacity: 0, y: 50 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5, delay: index * 0.1 }}
-        whileHover={{ y: -10 }}
-        className="group relative bg-white p-8 rounded-3xl border border-slate-100 shadow-sm hover:shadow-2xl transition-all duration-300 cursor-pointer overflow-hidden"
-    >
-        <div className={`absolute top-0 right-0 w-32 h-32 bg-gradient-to-br ${feature.gradient} opacity-10 rounded-bl-full transform translate-x-10 -translate-y-10 group-hover:scale-150 transition-transform duration-500`} />
+const FeatureCard = ({ title, desc, icon: Icon, action, path }) => {
+    const navigate = useNavigate();
+    return (
+        <motion.div
+            whileHover={{ y: -5 }}
+            className="group bg-white p-6 md:p-8 rounded-3xl border border-slate-100 shadow-sm hover:shadow-xl transition-all duration-300"
+        >
+            <div className="w-14 h-14 bg-orange-50 text-orange-600 rounded-2xl flex items-center justify-center mb-6 group-hover:bg-orange-600 group-hover:text-white transition-all duration-300">
+                <Icon size={28} strokeWidth={2.5} />
+            </div>
+            <h3 className="text-xl md:text-2xl font-extrabold text-slate-900 mb-3 tracking-tight">{title}</h3>
+            <p className="text-slate-500 text-sm md:text-base leading-relaxed mb-8">{desc}</p>
+            <button
+                onClick={() => navigate(path)}
+                className="w-full md:w-auto px-6 py-3 bg-slate-50 text-slate-900 rounded-xl font-bold text-sm md:text-base group-hover:bg-orange-600 group-hover:text-white transition-all duration-300 flex items-center justify-center gap-2 min-h-[44px]"
+            >
+                {action}
+                <ArrowRight size={18} />
+            </button>
+        </motion.div>
+    );
+};
 
-        <div className={`w-14 h-14 ${feature.bg} text-white rounded-2xl flex items-center justify-center mb-6 shadow-lg group-hover:rotate-12 transition-transform duration-300`}>
-            <feature.icon className="w-7 h-7" />
-        </div>
+const LandingPage = () => {
+    const navigate = useNavigate();
 
-        <h3 className="text-xl font-bold text-slate-900 mb-3 group-hover:text-orange-600 transition-colors">
-            {feature.title}
-        </h3>
-        <p className="text-slate-500 leading-relaxed mb-6 group-hover:text-slate-600">
-            {feature.desc}
-        </p>
+    return (
+        <div className="min-h-screen font-['Inter',sans-serif] bg-white overflow-x-hidden selection:bg-orange-100 selection:text-orange-900 scroll-smooth">
+            <Navbar />
 
-        <div className="flex items-center text-sm font-bold text-orange-600 opacity-0 transform translate-y-4 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300">
-            Learn More <ArrowRight className="w-4 h-4 ml-2" />
-        </div>
-    </motion.div>
-);
-
-const ArrowRight = ({ className }) => (
-    <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor">
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m0-4H3" />
-    </svg>
-);
-
-const StatItem = ({ stat, index }) => (
-    <motion.div
-        initial={{ opacity: 0, scale: 0.8 }}
-        whileInView={{ opacity: 1, scale: 1 }}
-        transition={{ duration: 0.5, delay: index * 0.1 }}
-        whileHover={{ scale: 1.05 }}
-        className="relative bg-white/80 backdrop-blur-lg rounded-2xl p-6 border border-white/50 shadow-xl text-center group"
-    >
-        <div className={`w-16 h-16 mx-auto ${stat.bg} ${stat.color} rounded-2xl flex items-center justify-center mb-4 shadow-inner group-hover:scale-110 transition-transform`}>
-            <stat.icon className="w-8 h-8" />
-        </div>
-        <h3 className="text-4xl font-extrabold text-slate-900 mb-1 tracking-tight">{stat.value}</h3>
-        <p className="text-sm font-semibold text-slate-500 uppercase tracking-wider">{stat.label}</p>
-    </motion.div>
-);
-
-const AboutSection = () => (
-    <section id="about" className="py-24 bg-white relative overflow-hidden">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+            {/* Hero Section - Mobile First */}
+            <section className="relative min-h-[100dvh] flex flex-col pt-32 pb-20 px-5 md:px-8 bg-slate-900 overflow-hidden">
+                {/* Improved Background logic for mobile - Increased visibility and contrast */}
                 <motion.div
-                    initial={{ opacity: 0, x: -50 }}
-                    whileInView={{ opacity: 1, x: 0 }}
-                    transition={{ duration: 0.8 }}
-                    className="relative z-10"
-                >
-                    <div className="mb-6">
-                        <span className="bg-orange-100 text-orange-600 px-4 py-1.5 rounded-full text-sm font-bold uppercase tracking-wider inline-block mb-4">
-                            About CampusOne
-                        </span>
-                        <h2 className="text-4xl md:text-5xl font-black text-slate-900 leading-tight mb-6">
-                            Shaping the Future of <br />
-                            <span className="text-transparent bg-clip-text bg-gradient-to-r from-orange-600 to-red-600">
-                                Education & Innovation
-                            </span>
-                        </h2>
-                        <p className="text-lg text-slate-500 mb-6 leading-relaxed">
-                            Founded with a vision to revolutionize learning, CampusOne has grown into a premier institution fostering excellence, creativity, and leadership. We bridge the gap between traditional academics and modern industry demands.
-                        </p>
-                        <p className="text-lg text-slate-500 mb-8 leading-relaxed">
-                            Our campus is more than just classrooms; it's a vibrant ecosystem where students explore, create, and innovate with state-of-the-art facilities and world-class mentorship.
-                        </p>
+                    initial={{ scale: 1.1 }}
+                    animate={{ scale: 1 }}
+                    transition={{ duration: 10, repeat: Infinity, repeatType: "reverse", ease: "linear" }}
+                    className="absolute inset-0 z-0 bg-cover bg-center brightness-[0.7] contrast-[1.2] saturate-[1.1]"
+                    style={{ backgroundImage: 'url(/svce_chatgpt.png)' }}
+                />
+                <div className="absolute inset-0 z-10 bg-gradient-to-b from-slate-900/30 via-transparent to-slate-900/80" />
 
-                        <div className="space-y-4 mb-8">
-                            {[
-                                "Industry-Aligned Curriculum",
-                                "World-Class Research Facilities",
-                                "Global University Partnerships",
-                                "100% Placement Assistance"
-                            ].map((item, i) => (
-                                <div key={i} className="flex items-center space-x-3">
-                                    <CheckCircle2 className="w-5 h-5 text-emerald-500 flex-shrink-0" />
-                                    <span className="text-slate-700 font-medium">{item}</span>
-                                </div>
-                            ))}
-                        </div>
+                <div className="relative z-20 max-w-7xl mx-auto w-full h-full flex flex-col justify-center items-center lg:items-end text-center lg:text-right pt-[20px] lg:translate-x-[40px]">
+                    <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-md px-4 py-2 rounded-full border border-white/20 mb-8"
+                    >
+                        <span className="w-2 h-2 rounded-full bg-orange-500 animate-pulse" />
+                        <span className="text-xs font-bold text-white uppercase tracking-widest">Active Academic Session 2026</span>
+                    </motion.div>
 
+                    <motion.h1
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: 0.1 }}
+                        className="text-4xl md:text-5xl lg:text-6xl font-black tracking-tighter leading-[1.1] mb-6 font-['Poppins',sans-serif]"
+                    >
+                        <span className="text-white">Advanced </span>
+                        <motion.span
+                            className="bg-clip-text text-transparent bg-gradient-to-r from-orange-400 via-orange-100 to-orange-400 bg-[length:200%_auto] inline-block"
+                            animate={{ backgroundPosition: ['200% center', '-200% center'] }}
+                            transition={{ duration: 6, repeat: Infinity, ease: "linear" }}
+                        >
+                            Campus
+                        </motion.span>
+                        <br />
+                        <motion.span
+                            className="bg-clip-text text-transparent bg-gradient-to-r from-orange-400 via-orange-100 to-orange-400 bg-[length:200%_auto] inline-block"
+                            animate={{ backgroundPosition: ['-200% center', '200% center'] }}
+                            transition={{ duration: 5, repeat: Infinity, ease: "linear" }}
+                        >
+                            Management
+                        </motion.span>
+                        <span className="text-white"> System.</span>
+                    </motion.h1>
+
+                    <motion.p
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: 0.2 }}
+                        className="text-sm md:text-lg text-white/90 max-w-2xl mb-10 leading-relaxed font-semibold drop-shadow-sm"
+                    >
+                        Reliable, secure, and lightning-fast. The unified operating system for <span className="text-orange-500 font-black px-1.5 py-0.5 bg-orange-500/10 rounded-lg shadow-[0_0_15px_rgba(249,115,22,0.3)] border border-orange-500/20">SVCE</span> students and faculty members.
+                    </motion.p>
+
+                    <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: 0.3 }}
+                        className="flex flex-col sm:flex-row gap-4 w-full sm:w-auto lg:justify-end"
+                    >
                         <motion.button
                             whileHover={{ scale: 1.05 }}
                             whileTap={{ scale: 0.95 }}
-                            className="btn-primary px-8 py-3 bg-slate-900 text-white rounded-xl font-bold flex items-center hover:bg-slate-800 transition-colors shadow-xl"
+                            onClick={() => navigate('/login')}
+                            className="group relative px-8 py-3.5 bg-orange-600 text-white rounded-[2rem] font-black text-base shadow-2xl shadow-orange-600/30 transition-all overflow-hidden"
                         >
-                            Read Our Story <ChevronRight className="w-4 h-4 ml-2" />
-                        </motion.button>
-                    </div>
-                </motion.div>
-
-                <motion.div
-                    initial={{ opacity: 0, x: 50 }}
-                    whileInView={{ opacity: 1, x: 0 }}
-                    transition={{ duration: 0.8 }}
-                    className="relative"
-                >
-                    {/* Abstract Composition replacing the image for now to keep it premium without relying on external assets likely to fail */}
-                    <div className="relative aspect-square md:aspect-[4/3] rounded-3xl overflow-hidden shadow-2xl border-4 border-white">
-                        <div className="absolute inset-0">
-                            <img
-                                src="/about_college.jpg"
-                                alt="Campus Life"
-                                className="w-full h-full object-cover brightness-90 contrast-110 saturate-120 hover:scale-110 transition-transform duration-700"
-                                style={{ filter: 'brightness(0.90) contrast(1.15) saturate(1.2)' }}
+                            <span className="relative z-10">Launch Student Portal</span>
+                            <motion.div
+                                className="absolute inset-x-0 top-0 h-full bg-gradient-to-r from-transparent via-white/30 to-transparent skew-x-[-30deg]"
+                                animate={{ left: ['-100%', '200%'] }}
+                                transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
                             />
-                        </div>
-                        {/* Overlay Card */}
-                        <motion.div
-                            initial={{ y: 20, opacity: 0 }}
-                            whileInView={{ y: 0, opacity: 1 }}
-                            transition={{ delay: 0.5 }}
-                            className="absolute bottom-8 left-8 right-8 bg-white/90 backdrop-blur-md p-6 rounded-2xl shadow-lg border border-white/50"
-                        >
-                            <div className="flex items-center space-x-4">
-                                <div className="bg-orange-100 p-3 rounded-full">
-                                    <Users className="w-8 h-8 text-orange-600" />
-                                </div>
-                                <div>
-                                    <p className="text-3xl font-bold text-slate-900">25+</p>
-                                    <p className="text-xs font-semibold uppercase text-slate-500">Years of Excellence</p>
-                                </div>
-                            </div>
-                        </motion.div>
-                    </div>
-                    {/* Decorative Elements */}
-                    <div className="absolute -z-10 top-10 -right-10 w-40 h-40 bg-orange-200 rounded-full blur-3xl opacity-50" />
-                    <div className="absolute -z-10 -bottom-10 -left-10 w-40 h-40 bg-blue-200 rounded-full blur-3xl opacity-50" />
-                </motion.div>
-            </div>
-        </div>
-    </section>
-);
-
-const ContactSection = () => (
-    <section id="contact" className="py-24 bg-slate-50 relative">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="text-center mb-16">
-                <span className="bg-blue-100 text-blue-600 px-4 py-1.5 rounded-full text-sm font-bold uppercase tracking-wider inline-block mb-4">
-                    Get in Touch
-                </span>
-                <h2 className="text-4xl md:text-5xl font-black text-slate-900 mb-4">
-                    We'd Love to Hear from You
-                </h2>
-                <p className="text-lg text-slate-500 max-w-2xl mx-auto">
-                    Have questions about admissions, campus life, or partnerships? Reach out to our team.
-                </p>
-            </div>
-
-            <div className="grid grid-cols-1 lg:grid-cols-5 gap-12 bg-white rounded-3xl overflow-hidden shadow-2xl border border-slate-100">
-                {/* Contact Info Sidebar */}
-                <div className="lg:col-span-2 bg-slate-900 p-10 text-white flex flex-col justify-between relative overflow-hidden">
-                    <div className="relative z-10">
-                        <h3 className="text-2xl font-bold mb-6">Contact Information</h3>
-                        <p className="text-slate-400 mb-8">
-                            Fill up the form and our Team will get back to you within 24 hours.
-                        </p>
-
-                        <div className="space-y-6">
-                            <div className="flex items-start space-x-4">
-                                <Phone className="w-6 h-6 text-orange-500 mt-1" />
-                                <div>
-                                    <p className="text-sm text-slate-400 font-medium">Call Us</p>
-                                    <p className="text-lg font-semibold">+91 98765 43210</p>
-                                </div>
-                            </div>
-                            <div className="flex items-start space-x-4">
-                                <Mail className="w-6 h-6 text-orange-500 mt-1" />
-                                <div>
-                                    <p className="text-sm text-slate-400 font-medium">Email Us</p>
-                                    <p className="text-lg font-semibold">admissions@campusone.edu</p>
-                                </div>
-                            </div>
-                            <div className="flex items-start space-x-4">
-                                <MapPin className="w-6 h-6 text-orange-500 mt-1" />
-                                <div>
-                                    <p className="text-sm text-slate-400 font-medium">Visit Us</p>
-                                    <p className="text-lg font-semibold">
-                                        CampusOne University,<br />
-                                        Knowledge Park III, Tech City
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    {/* Socials */}
-                    <div className="relative z-10 mt-12">
-                        <h4 className="text-sm font-bold text-slate-400 uppercase tracking-wider mb-4">Follow Us</h4>
-                        <div className="flex space-x-4">
-                            {[1, 2, 3, 4].map((i) => (
-                                <div key={i} className="w-10 h-10 bg-white/10 rounded-full flex items-center justify-center hover:bg-orange-600 transition-colors cursor-pointer backdrop-blur-sm">
-                                    <Globe className="w-5 h-5 text-white" />
-                                </div>
-                            ))}
-                        </div>
-                    </div>
-
-                    {/* Decorative Circles */}
-                    <div className="absolute top-0 right-0 w-64 h-64 bg-orange-600/20 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2" />
-                    <div className="absolute bottom-0 left-0 w-40 h-40 bg-blue-600/20 rounded-full blur-3xl translate-y-1/2 -translate-x-1/2" />
-                </div>
-
-                {/* Contact Form */}
-                <div className="lg:col-span-3 p-10">
-                    <form className="space-y-6">
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            <div className="space-y-2">
-                                <label className="text-sm font-bold text-slate-700">First Name</label>
-                                <input type="text" className="w-full px-4 py-3 rounded-xl bg-slate-50 border border-slate-200 focus:border-orange-500 focus:ring-2 focus:ring-orange-200 outline-none transition-all" placeholder="John" />
-                            </div>
-                            <div className="space-y-2">
-                                <label className="text-sm font-bold text-slate-700">Last Name</label>
-                                <input type="text" className="w-full px-4 py-3 rounded-xl bg-slate-50 border border-slate-200 focus:border-orange-500 focus:ring-2 focus:ring-orange-200 outline-none transition-all" placeholder="Doe" />
-                            </div>
-                        </div>
-
-                        <div className="space-y-2">
-                            <label className="text-sm font-bold text-slate-700">Email Address</label>
-                            <input type="email" className="w-full px-4 py-3 rounded-xl bg-slate-50 border border-slate-200 focus:border-orange-500 focus:ring-2 focus:ring-orange-200 outline-none transition-all" placeholder="john@example.com" />
-                        </div>
-
-                        <div className="space-y-2">
-                            <label className="text-sm font-bold text-slate-700">Subject</label>
-                            <select className="w-full px-4 py-3 rounded-xl bg-slate-50 border border-slate-200 focus:border-orange-500 focus:ring-2 focus:ring-orange-200 outline-none transition-all text-slate-600">
-                                <option>Admissions Inquiry</option>
-                                <option>Campus Visit Support</option>
-                                <option>Course Details</option>
-                                <option>Other</option>
-                            </select>
-                        </div>
-
-                        <div className="space-y-2">
-                            <label className="text-sm font-bold text-slate-700">Message</label>
-                            <textarea rows="4" className="w-full px-4 py-3 rounded-xl bg-slate-50 border border-slate-200 focus:border-orange-500 focus:ring-2 focus:ring-orange-200 outline-none transition-all resize-none" placeholder="How can we help you?"></textarea>
-                        </div>
-
-                        <motion.button
-                            whileHover={{ scale: 1.02 }}
-                            whileTap={{ scale: 0.98 }}
-                            className="w-full py-4 bg-gradient-to-r from-orange-600 to-red-600 text-white rounded-xl font-bold text-lg shadow-lg shadow-orange-500/30 flex items-center justify-center space-x-2"
-                        >
-                            <span>Send Message</span>
-                            <Send className="w-5 h-5" />
                         </motion.button>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </section>
-);
-
-const LandingPage = () => {
-    const { scrollYProgress } = useScroll();
-    const opacity = useTransform(scrollYProgress, [0, 0.2], [1, 0]);
-    const scale = useTransform(scrollYProgress, [0, 0.2], [1, 0.95]);
-
-    return (
-        <div className="min-h-screen font-sans relative">
-            <Navbar />
-
-            {/* Hero Section */}
-            <section className="relative h-screen flex items-center justify-center overflow-hidden">
-                {/* Premium Hero Background */}
-                <div className="absolute inset-0 w-full h-full z-0" style={{
-                    backgroundImage: 'url(/hero_bg.jpg)',
-                    backgroundSize: 'cover',
-                    backgroundPosition: 'center',
-                    backgroundRepeat: 'no-repeat',
-                }} />
-                {/* Premium Gradient Overlay */}
-                <div className="absolute inset-0 z-10" style={{
-                    background: 'linear-gradient(135deg, rgba(30,41,59,0.65) 0%, rgba(30,41,59,0.55) 60%, rgba(249,115,22,0.25) 100%)'
-                }} />
-
-                <motion.div
-                    style={{ opacity, scale }}
-                    className="relative z-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center pt-16 pb-32 flex flex-col items-center justify-center"
-                >
-                    <motion.div
-                        initial={{ opacity: 0, y: 40 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.8, ease: "easeOut" }}
-                    >
-                        <h1 className="text-5xl md:text-7xl lg:text-8xl font-extrabold text-white tracking-tight mb-6 leading-tight drop-shadow-2xl animate-fade-in-bottom">
-                            SV College of <br />
-                            <span className="text-transparent bg-clip-text bg-gradient-to-r from-orange-400 via-yellow-200 to-orange-400 bg-300% animate-gradient">
-                                Engineering
-                            </span>
-                        </h1>
-
-                        <motion.p
-                            initial={{ opacity: 0, y: 20 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            transition={{ duration: 0.6, ease: "easeOut" }}
-                            className="text-white/80 font-serif italic text-2xl mb-8 tracking-widest drop-shadow-lg animate-fade-in-bottom"
+                        <motion.button
+                            whileHover={{ scale: 1.05 }}
+                            whileTap={{ scale: 0.95 }}
+                            onClick={() => document.getElementById('features')?.scrollIntoView({ behavior: 'smooth' })}
+                            className="group relative px-8 py-3.5 bg-white/10 backdrop-blur-xl border border-white/20 text-white rounded-[2rem] font-black text-base transition-all overflow-hidden shadow-2xl"
                         >
-                            — SINCE 1981 —
-                        </motion.p>
-
-                        <motion.div
-                            whileHover={{ scale: 1.02 }}
-                            className="inline-block group cursor-default"
-                        >
-                            <p className="text-3xl md:text-5xl font-serif italic text-white tracking-wide drop-shadow-xl">
-                                "Education for a better <span className="text-orange-300 font-semibold group-hover:text-orange-200 transition-colors">society</span>"
-                            </p>
-                        </motion.div>
+                            <span className="relative z-10">Explore Features</span>
+                            <motion.div
+                                className="absolute inset-x-0 top-0 h-full bg-gradient-to-r from-transparent via-white/10 to-transparent skew-x-[-30deg]"
+                                whileHover={{ left: ['-100%', '200%'] }}
+                                transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
+                            />
+                        </motion.button>
                     </motion.div>
-                </motion.div>
-
-                {/* Floating Stats Pill - Bottom of Hero */}
-                <motion.div
-                    initial={{ y: 50, opacity: 0 }}
-                    animate={{ y: 0, opacity: 1 }}
-                    transition={{ delay: 0.5, duration: 0.8 }}
-                    className="absolute bottom-12 left-0 right-0 z-20 px-4"
-                >
-                    <div className="max-w-5xl mx-auto bg-white/95 backdrop-blur-xl rounded-full shadow-2xl py-5 px-10 flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0 text-slate-800 border border-white/50">
-                        <div className="flex flex-col items-center group cursor-pointer w-full md:w-auto">
-                            <h3 className="text-3xl font-black text-slate-900 group-hover:text-orange-600 transition-colors">15,000+</h3>
-                            <p className="text-xs font-bold text-slate-500 uppercase tracking-wider">Active Students</p>
-                        </div>
-                        <div className="hidden md:block w-px h-10 bg-slate-200"></div>
-                        <div className="flex flex-col items-center group cursor-pointer w-full md:w-auto">
-                            <h3 className="text-3xl font-black text-slate-900 group-hover:text-orange-600 transition-colors">850+</h3>
-                            <p className="text-xs font-bold text-slate-500 uppercase tracking-wider">Expert Faculty</p>
-                        </div>
-                        <div className="hidden md:block w-px h-10 bg-slate-200"></div>
-                        <div className="flex flex-col items-center group cursor-pointer w-full md:w-auto">
-                            <h3 className="text-3xl font-black text-slate-900 group-hover:text-orange-600 transition-colors">200+</h3>
-                            <p className="text-xs font-bold text-slate-500 uppercase tracking-wider">Course Programs</p>
-                        </div>
-                        <div className="hidden md:block w-px h-10 bg-slate-200"></div>
-                        <div className="flex flex-col items-center group cursor-pointer w-full md:w-auto">
-                            <h3 className="text-3xl font-black text-slate-900 group-hover:text-orange-600 transition-colors">98%</h3>
-                            <p className="text-xs font-bold text-slate-500 uppercase tracking-wider">Satisfaction Rate</p>
-                        </div>
-                    </div>
-                </motion.div>
+                </div>
             </section>
 
-            {/* Features Section */}
-            <section id="features" className="py-32 bg-slate-50 relative overflow-hidden">
-                {/* Decorative background blobs */}
-                <div className="absolute top-0 left-0 w-[500px] h-[500px] bg-orange-200/20 rounded-full blur-3xl -translate-x-1/2 -translate-y-1/2" />
-                <div className="absolute bottom-0 right-0 w-[500px] h-[500px] bg-blue-200/20 rounded-full blur-3xl translate-x-1/2 translate-y-1/2" />
-
-                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-                    <div className="text-center mb-20">
-                        <motion.span
-                            initial={{ opacity: 0, y: 20 }}
-                            whileInView={{ opacity: 1, y: 0 }}
-                            className="bg-orange-100 text-orange-700 px-6 py-2 rounded-full text-sm font-bold uppercase tracking-widest mb-6 inline-block shadow-sm"
-                        >
-                            Why Choose CampusOne?
-                        </motion.span>
-                        <motion.h2
-                            initial={{ opacity: 0, y: 20 }}
-                            whileInView={{ opacity: 1, y: 0 }}
-                            transition={{ delay: 0.1 }}
-                            className="text-4xl md:text-5xl font-black text-slate-900 mb-6"
-                        >
-                            Everything You Need to <br />
-                            <span className="text-transparent bg-clip-text bg-gradient-to-r from-orange-600 to-red-600">
-                                Excel Academically
-                            </span>
-                        </motion.h2>
-                    </div>
-
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+            {/* Quick Stats Banner - Positioned below Hero */}
+            <section className="relative z-30 pt-12 md:pt-16 px-5 md:px-8 bg-slate-50">
+                <div className="max-w-7xl mx-auto">
+                    <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
                         {[
-                            {
-                                title: 'Student Portal',
-                                desc: 'Access courses, grades, attendance, and academic resources in one centralized hub.',
-                                icon: Users,
-                                bg: 'bg-gradient-to-br from-orange-400 to-orange-600',
-                                gradient: 'from-orange-400 to-orange-600'
-                            },
-                            {
-                                title: 'Faculty Dashboard',
-                                desc: 'Streamline course management, grading, and student engagement with powerful tools.',
-                                icon: LayoutDashboard,
-                                bg: 'bg-gradient-to-br from-emerald-400 to-emerald-600',
-                                gradient: 'from-emerald-400 to-emerald-600'
-                            },
-                            {
-                                title: 'Course Management',
-                                desc: 'Efficiently handle registration, scheduling, and curriculum planning for all semesters.',
-                                icon: CalendarDays,
-                                bg: 'bg-gradient-to-br from-blue-400 to-blue-600',
-                                gradient: 'from-blue-400 to-blue-600'
-                            },
-                            {
-                                title: 'Secure & Reliable',
-                                desc: 'Enterprise-grade security ensuring your academic data is always safe and compliant.',
-                                icon: ShieldCheck,
-                                bg: 'bg-gradient-to-br from-amber-400 to-amber-600',
-                                gradient: 'from-amber-400 to-amber-600'
-                            }
-                        ].map((feature, index) => (
-                            <FeatureCard key={index} feature={feature} index={index} />
+                            { value: "10k+", label: "STUDENTS", color: "text-orange-600", delay: 0.1 },
+                            { value: "500+", label: "FACULTY", color: "text-indigo-600", delay: 0.2 },
+                            { value: "150+", label: "COURSES", color: "text-emerald-600", delay: 0.3 },
+                            { value: "90%", label: "PLACEMENT", color: "text-rose-600", delay: 0.4 }
+                        ].map((stat, i) => (
+                            <motion.div
+                                key={i}
+                                initial={{ opacity: 0, y: 20 }}
+                                whileInView={{ opacity: 1, y: 0 }}
+                                viewport={{ once: true }}
+                                transition={{ delay: stat.delay, duration: 0.5 }}
+                                className="bg-white p-6 md:p-10 rounded-[2.5rem] shadow-xl shadow-slate-200/50 border border-slate-100 flex flex-col items-center justify-center text-center group hover:scale-105 transition-all duration-500"
+                            >
+                                <span className={`text-3xl md:text-5xl font-black mb-2 tracking-tighter ${stat.color}`}>
+                                    {stat.value}
+                                </span>
+                                <span className="text-[10px] md:text-xs font-black text-slate-400 uppercase tracking-[0.2em]">
+                                    {stat.label}
+                                </span>
+                                <div className="mt-4 w-8 h-1 bg-slate-100 rounded-full group-hover:w-16 group-hover:bg-orange-600 transition-all duration-500" />
+                            </motion.div>
                         ))}
                     </div>
                 </div>
             </section>
 
-            <AboutSection />
-            <ContactSection />
+            {/* Feature Cards Grid */}
+            <section id="features" className="py-24 px-5 md:px-8 bg-slate-50">
+                <div className="max-w-7xl mx-auto text-center md:text-left">
+                    <div className="mb-16">
+                        <span className="text-orange-600 font-bold text-sm uppercase tracking-widest mb-4 block">Unified Infrastructure</span>
+                        <h2 className="text-3xl md:text-5xl font-extrabold text-slate-900 tracking-tight font-['Poppins',sans-serif]">Core Functional Modules</h2>
+                    </div>
 
-            {/* Footer */}
-            <footer className="bg-slate-900 text-slate-300 py-20 border-t border-slate-800">
-                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                    <div className="grid grid-cols-1 md:grid-cols-4 gap-12 mb-16">
-                        <div className="col-span-1 md:col-span-1">
-                            <div className="flex items-center space-x-2 mb-6">
-                                <div className="bg-gradient-to-br from-orange-500 to-red-600 p-2 rounded-lg">
-                                    <GraduationCap className="text-white w-6 h-6" />
-                                </div>
-                                <span className="text-2xl font-bold text-white tracking-tight">CampusOne</span>
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                        <FeatureCard
+                            title="Live Attendance"
+                            desc="Real-time tracking of academic presence with automated low-attendance warnings."
+                            icon={ClipboardCheck}
+                            action="Check Attendance"
+                            path="/login"
+                        />
+                        <FeatureCard
+                            title="Performance"
+                            desc="Detailed academic transcripts, internal marks analysis, and semester CGPA tracking."
+                            icon={LineChart}
+                            action="View Results"
+                            path="/login"
+                        />
+                        <FeatureCard
+                            title="Faculty Portal"
+                            desc="Enterprise-grade tools for classroom management, grading, and scheduling."
+                            icon={Users}
+                            action="Faculty Login"
+                            path="/login"
+                        />
+                        <FeatureCard
+                            title="Smart Notifications"
+                            desc="Direct institutional updates regarding exams, events, and administrative alerts."
+                            icon={Bell}
+                            action="Access Alerts"
+                            path="/login"
+                        />
+                    </div>
+                </div>
+            </section>
+
+            {/* About Section - Mobile Optimized */}
+            <section id="about" className="py-24 px-5 md:px-8 bg-white overflow-hidden">
+                <div className="max-w-7xl mx-auto">
+                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+                        <motion.div
+                            initial={{ opacity: 0, x: -30 }}
+                            whileInView={{ opacity: 1, x: 0 }}
+                            viewport={{ once: true }}
+                            className="space-y-8 text-center md:text-left"
+                        >
+                            <div>
+                                <span className="bg-orange-50 text-orange-600 px-4 py-2 rounded-full text-xs font-bold uppercase tracking-widest mb-4 inline-block">About College</span>
+                                <h2 className="text-3xl md:text-5xl lg:text-6xl font-extrabold text-slate-900 leading-[1.1] tracking-tighter font-['Poppins',sans-serif]">
+                                    Shaping the <br />
+                                    <span className="text-orange-600 underline underline-offset-8 decoration-slate-200">Innovators</span> of SVCE
+                                </h2>
                             </div>
-                            <p className="text-slate-400 leading-relaxed mb-6">
-                                Redefining education manageent with intelligent technology solutions for the modern campus.
+                            <p className="text-base md:text-lg text-slate-500 leading-relaxed font-medium">
+                                Founded in 2007, Sri Venkateswara College of Engineering (SVCE) Tirupati has rapidly emerged as a premier destination for technical education in Andhra Pradesh. We provide a holistic ecosystem that blends rigorous academic curriculum with real-world industry applications.
                             </p>
-                        </div>
 
-                        {/* Quick Links, Support, Contact columns - simplified for brevity but matching style */}
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 text-left">
+                                {[
+                                    { title: "Academic Excellence", desc: "NAAC A+ Accrediated and NBA certified programs." },
+                                    { title: "Industry 4.0 Labs", desc: "State-of-the-art facilities for AI, Robotics, and IoT." },
+                                    { title: "Global Placements", desc: "Elite track record with over 500+ multinational recruiters." },
+                                    { title: "Research Hub", desc: "Dedicated innovation cell with 50+ patents filed yearly." },
+                                    { title: "Smart Campus", desc: "Fully eco-friendly campus with 24/7 high-speed digital connectivity." },
+                                    { title: "Skill Development", desc: "Integrated APSSDC labs and professional certification courses." }
+                                ].map((item, i) => (
+                                    <div key={i} className="p-5 bg-slate-50 rounded-2xl border border-slate-100 hover:bg-orange-50/50 hover:border-orange-100 transition-colors group">
+                                        <h4 className="font-black text-slate-900 text-sm md:text-base mb-1 tracking-tight group-hover:text-orange-600">{item.title}</h4>
+                                        <p className="text-xs md:text-sm text-slate-500 font-medium leading-relaxed">{item.desc}</p>
+                                    </div>
+                                ))}
+                            </div>
+
+                            <button
+                                onClick={() => window.open('https://svce.edu.in/', '_blank')}
+                                className="w-full md:w-auto px-8 py-4 bg-slate-900 text-white rounded-2xl font-bold text-lg hover:bg-orange-600 transition-all min-h-[56px] shadow-lg"
+                            >
+                                Official Institutional Site
+                            </button>
+                        </motion.div>
+
+                        <div className="w-full relative px-2 md:px-0">
+                            <CollegeImageSlider />
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            {/* Contact Section - Clean ERP Style */}
+            <section id="contact" className="py-24 px-5 md:px-8 bg-slate-50">
+                <div className="max-w-7xl mx-auto">
+                    <div className="text-center mb-16">
+                        <span className="text-orange-600 font-bold text-sm uppercase tracking-widest mb-4 block">Institutional Helpdesk</span>
+                        <h2 className="text-3xl md:text-5xl font-extrabold text-slate-900 tracking-tight font-['Poppins',sans-serif]">Contact Information</h2>
+                    </div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                         {[
-                            { title: "Product", links: ["Features", "Pricing", "Case Studies", "Reviews"] },
-                            { title: "Resources", links: ["Documentation", "Help Center", "Community", "Guides"] },
-                            { title: "Legal", links: ["Privacy Policy", "Terms of Service", "Cookie Policy", "Security"] }
-                        ].map((col, idx) => (
-                            <div key={idx}>
-                                <h3 className="text-white font-bold mb-6">{col.title}</h3>
-                                <ul className="space-y-4">
-                                    {col.links.map(link => (
-                                        <li key={link}><a href="#" className="hover:text-orange-500 transition-colors">{link}</a></li>
-                                    ))}
-                                </ul>
+                            { title: "Admissions Office", detail: "+91-8886644969", icon: Phone },
+                            { title: "Official Support", detail: "info@svce.edu.in", icon: Mail },
+                            { title: "Campus Location", detail: "Tirupati, Andhra Pradesh", icon: MapPin }
+                        ].map((item, i) => (
+                            <div key={i} className="bg-white p-8 rounded-3xl border border-slate-100 shadow-sm flex flex-col items-center text-center">
+                                <div className="w-12 h-12 bg-slate-50 text-slate-900 rounded-2xl flex items-center justify-center mb-6">
+                                    <item.icon size={24} />
+                                </div>
+                                <h4 className="text-sm font-bold text-slate-400 uppercase tracking-widest mb-2">{item.title}</h4>
+                                <p className="text-lg font-extrabold text-slate-900 tracking-tight">{item.detail}</p>
                             </div>
                         ))}
                     </div>
+                </div>
+            </section>
 
-                    <div className="pt-8 border-t border-slate-800 flex flex-col md:flex-row justify-between items-center">
-                        <p className="text-slate-500 text-sm">© 2026 CampusOne. All rights reserved.</p>
-                        <div className="flex space-x-6 mt-4 md:mt-0">
-                            {/* Social Icons Placeholder */}
-                            <div className="w-6 h-6 bg-slate-800 rounded-full hover:bg-orange-500 transition-colors cursor-pointer" />
-                            <div className="w-6 h-6 bg-slate-800 rounded-full hover:bg-orange-500 transition-colors cursor-pointer" />
-                            <div className="w-6 h-6 bg-slate-800 rounded-full hover:bg-orange-500 transition-colors cursor-pointer" />
+            {/* Professional Footer */}
+            <footer className="bg-slate-950 text-white pt-20 pb-10 px-5 md:px-8">
+                <div className="max-w-7xl mx-auto">
+                    <div className="grid grid-cols-1 lg:grid-cols-4 gap-12 mb-16">
+                        <div className="lg:col-span-2">
+                            <div className="flex items-center gap-3 mb-6">
+                                <div className="bg-orange-600 p-2 rounded-xl">
+                                    <GraduationCap size={24} />
+                                </div>
+                                <span className="text-2xl font-extrabold tracking-tight">CampusOne</span>
+                            </div>
+                            <p className="text-slate-400 max-w-sm leading-relaxed mb-8">
+                                The official institutional operating system for engineering excellence and streamlined academic administration.
+                            </p>
+                            <div className="flex gap-4">
+                                {[
+                                    { icon: Instagram, url: "https://www.instagram.com/svcetirupati/" },
+                                    { icon: Linkedin, url: "https://www.linkedin.com/school/sri-venkateswara-college-of-engineering-tirupati/" },
+                                    { icon: Youtube, url: "https://www.youtube.com/@SVCETirupati" }
+                                ].map((soc, i) => (
+                                    <a key={i} href={soc.url} target="_blank" className="w-10 h-10 bg-white/5 border border-white/10 rounded-xl flex items-center justify-center hover:bg-orange-600 transition-colors">
+                                        <soc.icon size={20} />
+                                    </a>
+                                ))}
+                            </div>
                         </div>
+
+                        <div>
+                            <h4 className="text-sm font-bold uppercase tracking-widest text-slate-500 mb-6">Quick Links</h4>
+                            <ul className="space-y-4 text-slate-300 font-semibold">
+                                <li><a href="#about" className="hover:text-orange-500">Institutional Profile</a></li>
+                                <li><a href="#features" className="hover:text-orange-500">System Modules</a></li>
+                                <li><a href="/login" className="hover:text-orange-500">Student Access</a></li>
+                            </ul>
+                        </div>
+
+                        <div>
+                            <h4 className="text-sm font-bold uppercase tracking-widest text-slate-500 mb-6">Legal</h4>
+                            <ul className="space-y-4 text-slate-300 font-semibold">
+                                <li><a href="#" className="hover:text-orange-500">Privacy Policy</a></li>
+                                <li><a href="#" className="hover:text-orange-500">Institutional Terms</a></li>
+                                <li><a href="#" className="hover:text-orange-500">IT Security</a></li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div className="pt-8 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-4 text-sm text-slate-500">
+                        <p>© 2026 SVCE Tirupati. Engineered by CampusOne Team.</p>
+                        <p>Version 2.4.0 (Stable)</p>
                     </div>
                 </div>
             </footer>

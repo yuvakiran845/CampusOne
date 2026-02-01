@@ -1,61 +1,111 @@
-@import "tailwindcss";
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Outfit:wght@300;400;500;600;700;800;900&display=swap');
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+body {
+  font-family: 'Inter', sans-serif;
+}
+
 
 @theme {
-  --font-sans: 'Inter', sans-serif;
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
+  --font-display: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
 
-  /* Brand Colors from Reference Images */
-  --color-primary: #F97316;
-  /* Orange-500 */
-  --color-primary-hover: #EA580C;
-  /* Orange-600 */
-  --color-primary-light: #FFEDD5;
-  /* Orange-100 */
-
-  --color-dark: #0F172A;
-  /* Slate-900 (Footer/Headings) */
-  --color-dark-light: #1E293B;
-  /* Slate-800 */
-
-  --color-secondary: #64748B;
-
-  --color-success: #10B981;
-  --color-warning: #F59E0B;
-  --color-danger: #EF4444;
-
-  --color-background: #FFFFFF;
+  --color-primary: #007AFF;
+  --color-accent: #007AFF;
+  --color-dark: #1A1A1A;
+  --color-muted: #6B7280;
+  --color-background: #F9F9F9;
   --color-surface: #FFFFFF;
+  --color-border: #E5E5E5;
 }
 
 body {
   background-color: var(--color-background);
-  color: #334155;
-  /* Slate-700 */
+  color: var(--color-dark);
   font-family: var(--font-sans);
+  font-size: 16px;
+  line-height: 1.5;
   -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
-html {
-  scroll-behavior: smooth;
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: var(--font-display);
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  color: var(--color-dark);
 }
 
 @layer components {
-  .btn-primary {
-    @apply px-6 py-2.5 bg-primary text-white rounded-lg hover:bg-primary-hover transition-colors font-semibold shadow-md shadow-primary/20 flex items-center justify-center;
+
+  .btn-primary,
+  .btn {
+    @apply px-8 py-4 text-lg font-bold rounded-2xl transition-all flex items-center justify-center shadow-md;
+    background: linear-gradient(90deg, #f97316 0%, #fb923c 100%);
+    color: #fff;
+    border: none;
+    outline: none;
+    box-shadow: 0 4px 24px -8px rgba(249, 115, 22, 0.15);
+    letter-spacing: 0.02em;
+    cursor: pointer;
   }
 
-  .btn-outline {
-    @apply px-6 py-2.5 border-2 border-white text-white rounded-lg hover:bg-white/10 transition-colors font-semibold flex items-center justify-center;
+  .btn-primary:hover,
+  .btn:hover {
+    background: linear-gradient(90deg, #ea580c 0%, #f59e42 100%);
+    box-shadow: 0 8px 32px -8px rgba(249, 115, 22, 0.25);
+    transform: scale(1.04);
+  }
+
+  .btn-secondary {
+    @apply px-8 py-4 text-lg font-bold rounded-2xl transition-all flex items-center justify-center shadow-md;
+    background: #23272f;
+    color: #fff;
+    border: none;
+    outline: none;
+    box-shadow: 0 4px 24px -8px rgba(30, 41, 59, 0.10);
+    letter-spacing: 0.02em;
+    cursor: pointer;
+  }
+
+  .btn-secondary:hover {
+    background: #0f172a;
+    box-shadow: 0 8px 32px -8px rgba(30, 41, 59, 0.18);
+    transform: scale(1.04);
   }
 
   .nav-link {
-    @apply text-slate-600 hover:text-primary font-medium transition-colors;
+    @apply text-muted hover:text-dark font-medium transition-colors;
   }
 
   .card {
-    @apply bg-surface rounded-2xl shadow-sm border border-slate-100 p-8 hover:shadow-lg transition-shadow duration-300;
+    @apply bg-surface rounded-2xl border border-border p-6;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
   }
 
   .input-field {
-    @apply w-full px-4 py-3 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all text-slate-700 bg-slate-50;
+    @apply w-full px-4 py-2.5 border border-border rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/10 focus:border-primary transition-all text-dark bg-white;
   }
+}
+
+
+
+/* Remove any watermarks or branding */
+[class*="watermark"],
+[class*="branding"],
+[id*="watermark"],
+[id*="branding"],
+div[style*="position: fixed"][style*="bottom"],
+div[style*="position: absolute"][style*="bottom"][style*="right"] {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
 }

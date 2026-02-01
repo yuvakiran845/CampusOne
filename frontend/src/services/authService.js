@@ -8,17 +8,25 @@ const login = async (userData) => {
     return response.data;
 };
 
-const logout = () => {
-    localStorage.removeItem('user');
+const signout = () => {
+    localStorage.clear();
+    sessionStorage.clear();
 };
 
 const getCurrentUser = () => {
-    return JSON.parse(localStorage.getItem('user'));
+    try {
+        const user = localStorage.getItem('user');
+        return user ? JSON.parse(user) : null;
+    } catch (error) {
+        console.error('Error parsing user from localStorage:', error);
+        localStorage.removeItem('user');
+        return null;
+    }
 };
 
 const authService = {
     login,
-    logout,
+    signout,
     getCurrentUser,
 };
 

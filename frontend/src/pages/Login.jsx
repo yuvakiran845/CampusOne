@@ -1,16 +1,29 @@
 import { useNavigate } from 'react-router-dom';
-import { motion } from 'framer-motion';
-import { useState, useContext } from 'react';
-import { User, Lock, ArrowRight, Loader2, BookOpen, GraduationCap, ShieldCheck } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { useState, useContext, useEffect, useRef } from 'react';
+import {
+    User,
+    Lock,
+    Loader2,
+    GraduationCap,
+    BookOpen,
+    ShieldCheck,
+    Mail,
+    Eye,
+    EyeOff,
+    ArrowLeft
+} from 'lucide-react';
 import AuthContext from '../context/AuthContext';
 import { toast } from 'react-hot-toast';
 
 const Login = () => {
     const navigate = useNavigate();
     const { login } = useContext(AuthContext);
+    const emailInputRef = useRef(null);
 
     const [loading, setLoading] = useState(false);
-    const [activeRole, setActiveRole] = useState('student'); // student, faculty, admin
+    const [activeRole, setActiveRole] = useState('student');
+    const [showPassword, setShowPassword] = useState(false);
     const [formData, setFormData] = useState({
         email: '',
         password: ''
@@ -18,10 +31,16 @@ const Login = () => {
 
     const { email, password } = formData;
 
+    useEffect(() => {
+        if (emailInputRef.current) {
+            emailInputRef.current.focus();
+        }
+    }, [activeRole]);
+
     const roles = [
         { id: 'student', label: 'Student', icon: User },
         { id: 'faculty', label: 'Faculty', icon: BookOpen },
-        { id: 'admin', label: 'Administrator', icon: ShieldCheck },
+        { id: 'admin', label: 'Admin', icon: ShieldCheck },
     ];
 
     const onChange = (e) => {
@@ -36,15 +55,10 @@ const Login = () => {
         setLoading(true);
 
         try {
-            // In a real app we'd pass role too, or backend determines it.
-            // For now, we simulate different emails for different roles using the seeder.
-            const userData = await login(email, password);
-
-            // Basic role validation vs selected tab
-            if (userData.role !== activeRole) {
-                // Optional: warn mismatch? specific to requirement?
-                // For now, allow it but maybe show a toast "Logged in as [Role]"
-            }
+            const [userData] = await Promise.all([
+                login(email, password),
+                new Promise(resolve => setTimeout(resolve, 800))
+            ]);
 
             toast.success(`Welcome back, ${userData.name}!`);
 
@@ -54,8 +68,7 @@ const Login = () => {
             else navigate('/');
 
         } catch (error) {
-            console.error(error);
-            const message = error.response?.data?.message || 'Login failed';
+            const message = error.response?.data?.message || 'Invalid credentials';
             toast.error(message);
         } finally {
             setLoading(false);
@@ -63,129 +76,140 @@ const Login = () => {
     };
 
     return (
-        <div className="min-h-screen flex flex-col bg-slate-50">
-            {/* Simple Navbar for Login Page */}
-            <nav className="bg-white border-b border-slate-200 px-8 h-16 flex items-center justify-between">
-                <div className="flex items-center space-x-2 cursor-pointer" onClick={() => navigate('/')}>
-                    <div className="bg-primary p-1.5 rounded-lg">
-                        <GraduationCap className="text-white w-6 h-6" />
-                    </div>
-                    <span className="text-xl font-bold text-slate-900">CampusOne</span>
-                </div>
-                <div className="flex items-center space-x-6">
-                    <a href="/" className="text-sm font-medium text-slate-600 hover:text-primary">Features</a>
-                    <a href="/" className="text-sm font-medium text-slate-600 hover:text-primary">About</a>
-                    <a href="/" className="text-sm font-medium text-slate-600 hover:text-primary">Contact</a>
-                    <div onClick={() => navigate('/')} className="bg-primary text-white px-4 py-2 rounded-lg text-sm font-semibold cursor-pointer hover:bg-primary-hover transition-colors">
-                        Get Started
-                    </div>
-                </div>
-            </nav>
+        <div className="h-screen w-full bg-slate-50 flex items-center justify-center p-6 overflow-hidden font-sans antialiased selection:bg-indigo-100 selection:text-indigo-900 relative">
+            {/* Back Arrow */}
+            <motion.button
+                initial={{ opacity: 0, x: -10 }}
+                animate={{ opacity: 1, x: 0 }}
+                onClick={() => navigate('/')}
+                className="absolute top-8 left-8 p-3 bg-white border border-slate-100 rounded-2xl text-slate-400 hover:text-indigo-600 hover:border-indigo-100 hover:shadow-xl hover:shadow-indigo-500/5 transition-all group flex items-center gap-2"
+            >
+                <ArrowLeft size={20} className="group-hover:-translate-x-1 transition-transform" />
+                <span className="text-[10px] font-black uppercase tracking-[0.2em] pr-1">Home</span>
+            </motion.button>
 
-            {/* Login Content */}
-            <div className="flex-1 flex flex-col items-center justify-center p-4">
+            {/* Minimal Centered Card */}
+            <motion.div
+                initial={{ opacity: 0, y: 15 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, ease: "easeOut" }}
+                className="w-full max-w-[420px]"
+            >
+                {/* Logo & Header */}
                 <div className="text-center mb-8">
-                    <span className="bg-orange-100 text-orange-600 px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider mb-4 inline-block">
-                        Portal Login
-                    </span>
-                    <h1 className="text-3xl font-bold text-slate-900 mt-2">Welcome Back</h1>
-                    <p className="text-slate-500 mt-2">Sign in to access your portal</p>
+                    <motion.div
+                        initial={{ scale: 0.9 }}
+                        animate={{ scale: 1 }}
+                        className="inline-flex bg-indigo-600 p-3 rounded-2xl mb-4 shadow-lg shadow-indigo-200"
+                    >
+                        <GraduationCap className="w-8 h-8 text-white" />
+                    </motion.div>
+                    <h1 className="text-2xl font-bold text-slate-900 tracking-tight">CampusOne</h1>
+                    <p className="text-slate-500 text-sm font-medium">Institutional Access Portal</p>
                 </div>
 
-                <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    className="w-full max-w-md bg-white rounded-2xl shadow-xl border border-slate-100 overflow-hidden p-8"
-                >
-                    <p className="text-sm font-medium text-slate-900 mb-4">I am a...</p>
+                {/* Login Card */}
+                <div className="bg-white rounded-[1.5rem] shadow-[0_20px_50px_rgba(0,0,0,0.04)] border border-slate-100 p-8 sm:p-10">
 
-                    {/* Role Tabs */}
-                    <div className="grid grid-cols-3 gap-3 mb-8">
-                        {roles.map((role) => (
-                            <button
-                                key={role.id}
-                                onClick={() => setActiveRole(role.id)}
-                                className={`flex flex-col items-center justify-center p-3 rounded-xl border transition-all duration-200 ${activeRole === role.id
-                                    ? 'border-orange-500 bg-orange-50 text-orange-600 ring-2 ring-orange-500/20'
-                                    : 'border-slate-200 text-slate-500 hover:border-orange-200 hover:bg-slate-50'
-                                    }`}
-                            >
-                                <role.icon className={`w-5 h-5 mb-1.5 ${activeRole === role.id ? 'text-orange-600' : 'text-slate-400'}`} />
-                                <span className="text-xs font-semibold">{role.label}</span>
-                            </button>
-                        ))}
+                    {/* Role Segmented Picker */}
+                    <div className="mb-8">
+                        <div className="flex p-1.5 bg-slate-100/80 rounded-xl relative">
+                            {roles.map((role) => (
+                                <button
+                                    key={role.id}
+                                    type="button"
+                                    onClick={() => setActiveRole(role.id)}
+                                    className={`relative flex-1 py-2 text-xs font-bold uppercase tracking-wider transition-colors z-10 ${activeRole === role.id ? 'text-indigo-600' : 'text-slate-400 hover:text-slate-600'
+                                        }`}
+                                >
+                                    {role.label}
+                                    {activeRole === role.id && (
+                                        <motion.div
+                                            layoutId="segmented-bg"
+                                            className="absolute inset-0 bg-white rounded-lg shadow-sm z-[-1]"
+                                            transition={{ type: "spring", bounce: 0.15, duration: 0.5 }}
+                                        />
+                                    )}
+                                </button>
+                            ))}
+                        </div>
                     </div>
 
-                    <form onSubmit={handleLogin} className="space-y-5">
-                        <div className="space-y-1">
-                            <label className="text-sm font-medium text-slate-700">Email</label>
-                            <div className="relative">
-                                <div className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400">
-                                    <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-                                    </svg>
+                    <form onSubmit={handleLogin} className="space-y-6">
+                        <div className="space-y-5">
+                            {/* Email Field */}
+                            <div className="space-y-1.5">
+                                <label className="text-[11px] font-bold text-slate-500 uppercase tracking-widest ml-1">Email</label>
+                                <div className="relative group">
+                                    <div className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-300 group-focus-within:text-indigo-500 transition-colors">
+                                        <Mail size={18} strokeWidth={2} />
+                                    </div>
+                                    <input
+                                        ref={emailInputRef}
+                                        type="email"
+                                        name="email"
+                                        value={email}
+                                        onChange={onChange}
+                                        required
+                                        className="w-full pl-12 pr-4 py-3.5 bg-slate-50 border border-transparent rounded-xl text-sm font-semibold text-slate-900 focus:bg-white focus:border-indigo-100 focus:ring-4 focus:ring-indigo-500/5 outline-none transition-all placeholder:text-slate-300"
+                                        placeholder={`name@${activeRole}.campus.edu`}
+                                    />
                                 </div>
-                                <input
-                                    type="email"
-                                    name="email"
-                                    value={email}
-                                    onChange={onChange}
-                                    className="input-field pl-10"
-                                    placeholder="you@university.edu"
-                                    required
-                                />
+                            </div>
+
+                            {/* Password Field */}
+                            <div className="space-y-1.5">
+                                <div className="flex justify-between items-end">
+                                    <label className="text-[11px] font-bold text-slate-500 uppercase tracking-widest ml-1">Password</label>
+                                    <button type="button" className="text-[11px] font-bold text-indigo-600 hover:text-indigo-700 uppercase tracking-widest transition-colors">Forgot?</button>
+                                </div>
+                                <div className="relative group">
+                                    <div className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-300 group-focus-within:text-indigo-500 transition-colors">
+                                        <Lock size={18} strokeWidth={2} />
+                                    </div>
+                                    <input
+                                        type={showPassword ? "text" : "password"}
+                                        name="password"
+                                        value={password}
+                                        onChange={onChange}
+                                        required
+                                        className="w-full pl-12 pr-12 py-3.5 bg-slate-50 border border-transparent rounded-xl text-sm font-semibold text-slate-900 focus:bg-white focus:border-indigo-100 focus:ring-4 focus:ring-indigo-500/5 outline-none transition-all placeholder:text-slate-300"
+                                        placeholder="••••••••"
+                                    />
+                                    <button
+                                        type="button"
+                                        onClick={() => setShowPassword(!showPassword)}
+                                        className="absolute right-3 top-1/2 -translate-y-1/2 p-2 text-slate-300 hover:text-indigo-600 transition-colors"
+                                    >
+                                        {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
+                                    </button>
+                                </div>
                             </div>
                         </div>
 
-                        <div className="space-y-1">
-                            <label className="text-sm font-medium text-slate-700">Password</label>
-                            <div className="relative">
-                                <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
-                                <input
-                                    type="password"
-                                    name="password"
-                                    value={password}
-                                    onChange={onChange}
-                                    className="input-field pl-10"
-                                    placeholder="••••••••"
-                                    required
-                                />
-                            </div>
-                        </div>
-
-                        <div className="flex items-center justify-between text-sm">
-                            <label className="flex items-center space-x-2 cursor-pointer">
-                                <input type="checkbox" className="rounded border-slate-300 text-primary focus:ring-primary h-4 w-4" />
-                                <span className="text-slate-600">Remember me</span>
-                            </label>
-                            <a href="#" className="font-medium text-primary hover:text-primary-hover">Forgot password?</a>
-                        </div>
-
-                        <button
+                        <motion.button
+                            whileHover={{ scale: 1.01, translateY: -1 }}
+                            whileTap={{ scale: 0.99 }}
                             type="submit"
                             disabled={loading}
-                            className="w-full btn-primary py-3 text-base flex items-center justify-center space-x-2"
+                            className="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-4 rounded-xl shadow-lg shadow-indigo-100 flex items-center justify-center gap-2.5 transition-all disabled:opacity-70 disabled:cursor-not-allowed mt-4"
                         >
                             {loading ? (
-                                <Loader2 className="w-5 h-5 animate-spin" />
+                                <Loader2 className="animate-spin w-5 h-5" />
                             ) : (
-                                <>
-                                    <span>Sign In to Portal</span>
-                                </>
+                                <span className="text-sm uppercase tracking-[0.1em]">Sign In</span>
                             )}
-                        </button>
+                        </motion.button>
                     </form>
+                </div>
 
-                    <div className="mt-8 text-center text-sm text-slate-500">
-                        Need help? Contact <a href="#" className="text-primary font-semibold hover:underline">IT Support</a>
-                    </div>
-                </motion.div>
-            </div>
-
-            {/* Simple Footer for Login */}
-            <footer className="bg-[#0F172A] py-12 text-center text-slate-400 text-sm">
-                <p>© 2026 CampusOne. All rights reserved.</p>
-            </footer>
+                {/* Footer Link */}
+                <div className="text-center mt-8">
+                    <p className="text-slate-400 text-xs font-medium">
+                        Need assistance? <span className="text-indigo-500 hover:underline cursor-pointer font-bold">Contact Support</span>
+                    </p>
+                </div>
+            </motion.div>
         </div>
     );
 };
