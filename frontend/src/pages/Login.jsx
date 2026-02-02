@@ -71,10 +71,7 @@ const Login = () => {
         setLoading(true);
 
         try {
-            const [userData] = await Promise.all([
-                login(email, password),
-                new Promise(resolve => setTimeout(resolve, 800))
-            ]);
+            const userData = await login(email, password);
 
             toast.success(`Welcome back, ${userData.name}!`);
 
